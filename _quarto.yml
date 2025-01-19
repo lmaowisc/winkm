@@ -1,0 +1,30 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "WinKM"
+  navbar:
+    background: "#0072BC"
+    left:
+      - href: index.qmd
+        text: Home
+
+format:
+  html:
+    theme: yeti
+    css: styles.css
+    toc: true
+    linkcolor: "#C5050C"
+    backgroundcolor: "#FFFFFF"
+    grid:
+      sidebar-width: 300px
+      body-width: 1000px
+      margin-width: 300px
+      gutter-width: 1.5rem
+    filters:
+      - newpagelink.lua
+
+
+
+
