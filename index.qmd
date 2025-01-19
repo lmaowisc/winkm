@@ -1,6 +1,6 @@
 ---
 title: "Calculating win-loss statistics using summary data"
-subtitle: "Such as published Kaplan-Meier curves of overall and event-free survival"
+subtitle: "Reconstruction based on published Kaplan-Meier curves of overall and event-free survival"
 ---
 
 ## Introduction
