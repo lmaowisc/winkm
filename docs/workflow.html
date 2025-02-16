@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-02-15">
 
-<title>Calculating win-loss statistics using summary data – WinKM</title>
+<title>Workflow – WinKM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -90,11 +89,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./workflow.html"> 
+    <a class="nav-link active" href="./workflow.html" aria-current="page"> 
 <span class="menu-text">Workflow</span></a>
   </li>  
   <li class="nav-item">
@@ -112,23 +111,15 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#basic-idea" id="toc-basic-idea" class="nav-link active" data-scroll-target="#basic-idea">Basic idea</a></li>
-  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Calculating win-loss statistics using summary data</h1>
-<p class="subtitle lead">Reconstruction based on published Kaplan-Meier curves of overall and event-free survival</p>
+<h1 class="title">Workflow</h1>
 </div>
 
 
@@ -136,12 +127,6 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-title-meta">
 
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">February 15, 2025</p>
-    </div>
-  </div>
   
     
   </div>
@@ -151,27 +136,8 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><strong>WinKM</strong> provides a simple way to calculate win-loss statistics using summary data. This is useful when you have access to published Kaplan-Meier (KM) curves of <em>overall survival</em> (OS) and nonfatal <em>event-free survival time</em> (EFS), but not the individual patient data, as is often the case in <strong>systematic reviews</strong> and <strong>meta-analyses</strong>.</p>
-<section id="basic-idea" class="level2">
-<h2 class="anchored" data-anchor-id="basic-idea">Basic idea</h2>
-<p>The basic idea is to consider the win and loss proportions by a certain time as a functional of the joint distribution of OS and EFS. Since we only have the marginal distributions through the KM curves, we will need to infer their associations via additional summary data like <em>total event counts and rates</em>.</p>
-<p>All in all, we need the following for each arm:</p>
-<ul>
-<li><strong>KM estimates</strong> for OS and EFS (You can scan and digitize the curves using free online tools like <a href="https://apps.automeris.io/wpd/" target="_blank">WebPlotDigitizer</a>;</li>
-<li><strong>At-risk table</strong> at selected time points (usually provided below the KM curves);</li>
-<li><strong>Total event counts</strong>:
-<ul>
-<li>Deaths (OS);</li>
-<li>EFS endpoints (first of death/nonfatal event)</li>
-<li>Nonfatal event.</li>
-</ul></li>
-</ul>
-</section>
-<section id="example" class="level2">
-<h2 class="anchored" data-anchor-id="example">Example</h2>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
