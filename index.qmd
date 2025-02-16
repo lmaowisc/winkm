@@ -17,11 +17,12 @@ infer their associations via additional summary data like *total event counts an
 
 All in all, we need the following for each arm:
 
--   **KM estimates** for OS and EFS (You can scan and digitize the curves using free online tools like [WebPlotDigitizer](https://apps.automeris.io/wpd/);
+-   **KM estimates** for OS and EFS (obtained by scanning and digitizing the curves using free online tools like [WebPlotDigitizer](https://apps.automeris.io/wpd/);
 -   **At-risk table** at selected time points (usually provided below the KM curves);
--   **Total event counts**:
+-   **Total event counts** (reported in the CONSORT diagram or results section):
     -   Deaths (OS);
-    -   EFS endpoints (first of death/nonfatal event)
+    -   EFS endpoints (first of death/nonfatal event);
     -   Nonfatal event.
 
 ## Example
+
