@@ -11,6 +11,27 @@
     "href": "index.html",
     "title": "Calculating win-loss statistics using summary data",
     "section": "",
-    "text": "Introduction"
+    "text": "WinKM provides a simple way to calculate win-loss statistics using summary data. This is useful when you have access to published Kaplan-Meier (KM) curves of overall and event-free survival, but not the individual patient data, as is often the case in systematic reviews and meta-analyses."
+  },
+  {
+    "objectID": "index.html#basics",
+    "href": "index.html#basics",
+    "title": "Calculating win-loss statistics using summary data",
+    "section": "Basics",
+    "text": "Basics\nThe basic idea is to use the published Kaplan-Meier curves to estimate the survival probabilities at different time points. These probabilities are then used to calculate the win-loss statistics."
+  },
+  {
+    "objectID": "index.html#basic-idea",
+    "href": "index.html#basic-idea",
+    "title": "Calculating win-loss statistics using summary data",
+    "section": "Basic idea",
+    "text": "Basic idea\nThe basic idea is to consider the win and loss proportions by a certain time as a functional of the joint distribution of overall survival (OS) and nonfatal event-free survival time (EFS). Since we only have the marginal distributions through the KM curves, we will need to infer their associations via additional summary data like total event counts and rates.\nAll in all, we need the following for each arm:\n\nKM estimates for OS and EFS (You can scan and digitize the curves using free online tools like WebPlotDigitizer;\nAt-risk table at selected time points (usually provided below the KM curves);\nTotal event counts:\n\nDeaths (OS);\nEFS endpoints (first of death/nonfatal event)\nNonfatal event."
+  },
+  {
+    "objectID": "index.html#example",
+    "href": "index.html#example",
+    "title": "Calculating win-loss statistics using summary data",
+    "section": "Example",
+    "text": "Example"
   }
 ]
