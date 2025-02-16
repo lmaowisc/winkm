@@ -9,6 +9,10 @@ website:
     left:
       - href: index.qmd
         text: Home
+      - href: workflow.qmd
+        text: Workflow
+      - href: case.qmd
+        text: Case Studies
 
 format:
   html:
