@@ -2,27 +2,85 @@
 title: "Calculating win-loss statistics using summary data"
 subtitle: "Reconstruction based on published Kaplan-Meier curves of overall and event-free survival"
 date: today
+editor: 
+  markdown: 
+    wrap: 72
+bibliography: references.bib
 ---
 
-**WinKM** provides a simple way to calculate win-loss statistics using summary data. 
-This is useful when you have access to published Kaplan-Meier (KM) curves of *overall survival* (OS) and nonfatal *event-free survival time* (EFS), but not the individual patient data,
+
+
+**WinKM** provides a simple way to calculate win-loss statistics using
+summary data. This is useful when you have access to only published
+Kaplan-Meier (KM) curves of *overall survival* (OS) and nonfatal
+*event-free survival time* (EFS), but not the individual patient data,
 as is often the case in **systematic reviews** and **meta-analyses**.
 
 ## Basic idea
 
-The basic idea is to consider the win and loss proportions by a certain time as a functional
-of the joint distribution of OS and EFS. 
-Since we only have the marginal distributions through the KM curves, we will need to
-infer their associations via additional summary data like *total event counts and rates*.
+The basic idea is to consider the win and loss proportions by a certain
+time as a functional of the joint distribution of OS and EFS. Since we
+only have the marginal distributions through the KM curves, we will need
+to infer their associations via additional summary data like *total
+event counts and rates*.
 
 All in all, we need the following for each arm:
 
--   **KM estimates** for OS and EFS (obtained by scanning and digitizing the curves using free online tools like [WebPlotDigitizer](https://apps.automeris.io/wpd/);
--   **At-risk table** at selected time points (usually provided below the KM curves);
--   **Total event counts** (reported in the CONSORT diagram or results section):
+-   **KM estimates** for OS and EFS (obtained by scanning and digitizing
+    the curves using free online tools like
+    [WebPlotDigitizer](https://apps.automeris.io/wpd/);
+-   **At-risk table** at selected time points (usually provided below
+    the KM curves);
+-   **Total event counts** (reported in the CONSORT diagram or results
+    section):
     -   Deaths (OS);
     -   EFS endpoints (first of death/nonfatal event);
     -   Nonfatal event.
 
-## Example
+## An Example
 
+### Installation
+
+Download and compile the R functions from the `winkm_functions.R` script
+available at the [GitHub repository](https://github.com/lmaowisc/winkm).
+
+```{r}
+source("winkm_functions.R")
+```
+
+### Original study
+
+```{r}
+#| echo: false
+#| warning: false
+#| include: false
+
+# Define source and destination paths
+source_dir <- "data/Camrelizumab Luo 2021 - JAMA/"
+
+# Copy the file
+file.copy(paste0(source_dir, "camrelizumab_os.csv"), paste0("docs/", "camrelizumab_os.csv"), overwrite = TRUE)
+file.copy(paste0(source_dir, "camrelizumab_pfs.csv"), paste0("docs/", "camrelizumab_pfs.csv"), overwrite = TRUE)
+# ?file.copy
+```
+
+
+Consider the ESCORT-1st trial [@luo2021, open-access] that compares the efficacy of **camrelizumab**
+($N=298$) versus **placebo** ($N=298$) (both in combination with
+chemotherapy) in patients with advanced esophageal squamous cell
+carcinoma on the *co-primary endpoints* of
+
+-   **Overall survival** (OS);
+-   **Progression free survival** (PFS).
+
+### Scanning the KM curves
+
+The KM curves for OS and PFS are accessible in [Figure 2](https://cdn.jamanetwork.com/ama/content_public/journal/jama/938771/joi210086f2_1631212840.67618.png?Expires=1742906986&Signature=WCvbxcuOTh8hPw~iEh2XWTNts3Pz7nUT7PohXwdZZYqGDMfjAiYi5E~UCPFkZNQVJH7X01c4SzFLqV-q6EBpTdfxKDBJ49kk-oXN9JcsQZ1gvGgPRwhm0j-a6SVDPNCsifiOPEY3dyc0Qcj0d2pXChb51nNA1luMmDM9ngPAdBPy5cLVm9~Ao0TC9mzWD2cRrTbpD82YCwVQ8ukSieJWMsv9zoNjKjw0hnXgSNuAu6J6dWMH61P9LRPDTvpI6fgBYoD4h6Xo7aERiRMgh8ExIGZQgwBmNCJBcupPRu-10NTHH4BnLgM-eitKI0EG96a0pRDVy8mDe5FzqwtmfuQPvw__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA) of the original publication. I scanned the graphs using [WebPlotDigitizer](https://apps.automeris.io/wpd/) and stored the digitized
+data in:
+
+-   [camrelizumab_os.csv](https://lmaowisc.github.io/winkm/camrelizumab_os.csv) for OS;
+-   [camrelizumab_pfs.csv](https://lmaowisc.github.io/winkm/camrelizumab_pfs.csv) for PFS.
+
+
+
+## References

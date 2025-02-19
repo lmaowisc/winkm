@@ -11,7 +11,7 @@
     "href": "index.html",
     "title": "Calculating win-loss statistics using summary data",
     "section": "",
-    "text": "WinKM provides a simple way to calculate win-loss statistics using summary data. This is useful when you have access to published Kaplan-Meier (KM) curves of overall survival (OS) and nonfatal event-free survival time (EFS), but not the individual patient data, as is often the case in systematic reviews and meta-analyses."
+    "text": "WinKM provides a simple way to calculate win-loss statistics using summary data. This is useful when you have access to only published Kaplan-Meier (KM) curves of overall survival (OS) and nonfatal event-free survival time (EFS), but not the individual patient data, as is often the case in systematic reviews and meta-analyses."
   },
   {
     "objectID": "index.html#basics",
@@ -25,7 +25,7 @@
     "href": "index.html#basic-idea",
     "title": "Calculating win-loss statistics using summary data",
     "section": "Basic idea",
-    "text": "Basic idea\nThe basic idea is to consider the win and loss proportions by a certain time as a functional of the joint distribution of OS and EFS. Since we only have the marginal distributions through the KM curves, we will need to infer their associations via additional summary data like total event counts and rates.\nAll in all, we need the following for each arm:\n\nKM estimates for OS and EFS (obtained by scanning and digitizing the curves using free online tools like WebPlotDigitizer;\nAt-risk table at selected time points (usually provided below the KM curves);\nTotal event counts (reported in the CONSORT diagram or results section):\n\nDeaths (OS);\nEFS endpoints (first of death/nonfatal event)\nNonfatal event."
+    "text": "Basic idea\nThe basic idea is to consider the win and loss proportions by a certain time as a functional of the joint distribution of OS and EFS. Since we only have the marginal distributions through the KM curves, we will need to infer their associations via additional summary data like total event counts and rates.\nAll in all, we need the following for each arm:\n\nKM estimates for OS and EFS (obtained by scanning and digitizing the curves using free online tools like WebPlotDigitizer;\nAt-risk table at selected time points (usually provided below the KM curves);\nTotal event counts (reported in the CONSORT diagram or results section):\n\nDeaths (OS);\nEFS endpoints (first of death/nonfatal event);\nNonfatal event."
   },
   {
     "objectID": "index.html#example",
@@ -33,5 +33,12 @@
     "title": "Calculating win-loss statistics using summary data",
     "section": "Example",
     "text": "Example"
+  },
+  {
+    "objectID": "index.html#an-example",
+    "href": "index.html#an-example",
+    "title": "Calculating win-loss statistics using summary data",
+    "section": "An Example",
+    "text": "An Example\n\nInstallation\nDownload and compile the R functions from the winkm_functions.R script available at the GitHub repository.\n\nsource(\"winkm_functions.R\")\n\n\n\nOriginal study\nConsider the ESCORT-1st trial (Luo et al. 2021, open-access) that compares the efficacy of camrelizumab (\\(N=298\\)) versus placebo (\\(N=298\\)) (both in combination with chemotherapy) in patients with advanced esophageal squamous cell carcinoma on the co-primary endpoints of\n\nOverall survival (OS);\nProgression free survival (PFS).\n\n\n\nScanning the KM curves\nThe KM curves for OS and PFS are accessible in Figure 2 of the original publication. I scanned the graphs using WebPlotDigitizer and stored the digitized data in:\n\ncamrelizumab_os.csv for OS;\ncamrelizumab_pfs.csv for PFS."
   }
 ]
