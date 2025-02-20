@@ -1,0 +1,6 @@
+---
+title: "Papers"
+---
+
+-   Mao, L. (2025). Approximating Win-Loss Probabilities Based on the Overall and Event-Free Survival Functions. ([Preprint](http://dx.doi.org/10.2139/ssrn.5142445))
+

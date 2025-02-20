@@ -2,9 +2,8 @@
 title: "Calculating win-loss statistics using summary data"
 subtitle: "Reconstruction based on published Kaplan-Meier curves of overall and event-free survival"
 date: today
-editor: 
-  markdown: 
-    wrap: 72
+execute:
+  warning: false
 bibliography: references.bib
 ---
 
@@ -37,7 +36,7 @@ All in all, we need the following for each arm:
     -   EFS endpoints (first of death/nonfatal event);
     -   Nonfatal event.
 
-## An Example
+## An Example: a step-by-step guide
 
 ### Installation
 
@@ -46,6 +45,8 @@ available at the [GitHub repository](https://github.com/lmaowisc/winkm).
 
 ```{r}
 source("winkm_functions.R")
+library(tidyverse) # for data manipulation and visualization
+library(ggsci) # for color palettes
 ```
 
 ### Original study
@@ -73,13 +74,116 @@ carcinoma on the *co-primary endpoints* of
 -   **Overall survival** (OS);
 -   **Progression free survival** (PFS).
 
-### Scanning the KM curves
+### Scan the KM curves
 
 The KM curves for OS and PFS are accessible in [Figure 2](https://cdn.jamanetwork.com/ama/content_public/journal/jama/938771/joi210086f2_1631212840.67618.png?Expires=1742906986&Signature=WCvbxcuOTh8hPw~iEh2XWTNts3Pz7nUT7PohXwdZZYqGDMfjAiYi5E~UCPFkZNQVJH7X01c4SzFLqV-q6EBpTdfxKDBJ49kk-oXN9JcsQZ1gvGgPRwhm0j-a6SVDPNCsifiOPEY3dyc0Qcj0d2pXChb51nNA1luMmDM9ngPAdBPy5cLVm9~Ao0TC9mzWD2cRrTbpD82YCwVQ8ukSieJWMsv9zoNjKjw0hnXgSNuAu6J6dWMH61P9LRPDTvpI6fgBYoD4h6Xo7aERiRMgh8ExIGZQgwBmNCJBcupPRu-10NTHH4BnLgM-eitKI0EG96a0pRDVy8mDe5FzqwtmfuQPvw__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA) of the original publication. I scanned the graphs using [WebPlotDigitizer](https://apps.automeris.io/wpd/) and stored the digitized
 data in:
 
 -   [camrelizumab_os.csv](https://lmaowisc.github.io/winkm/camrelizumab_os.csv) for OS;
 -   [camrelizumab_pfs.csv](https://lmaowisc.github.io/winkm/camrelizumab_pfs.csv) for PFS.
+
+Read and clean OS data:
+```{r}
+# Reading (OS) from CSV, skipping first 2 lines, specifying col_names manually
+# Data look like this:
+# placebo_chemo		camr_chemo	
+# X	Y	X	Y
+# 0.178704185	1	0.111817005	0.995059289
+# 0.580821703	0.994071146	0.536244961	0.990118577
+os_data <- readr::read_csv(
+  "data/Camrelizumab Luo 2021 - JAMA/camrelizumab_os.csv",  # Replace with your path
+  skip = 2,
+  col_names = c("time_placebo", "surv_placebo",
+                "time_camr",    "surv_camr")
+  # col_names must be in the format: "time_group", "surv_group"
+)
+
+# Pivot to long, labeling groups
+os_long <- prepare_km_data(
+  km_data       = os_data,
+  time_cols     = c("time_placebo", "time_camr"),
+  surv_cols     = c("surv_placebo", "surv_camr"),
+  ref = "placebo", # "group0" in "time_group0", "surv_group0"
+  group_labels  = c("Placebo", "Camrelizumab") # First ref (ctr) and then trt
+)
+```
+
+Read and clean PFS data:
+
+```{r}
+# Reading (PFS) from CSV, skipping first 2 lines, specifying col_names manually
+# Data look like this:
+# placebo_chemo		camr_chemo	
+# X	Y	X	Y
+# 0.203515376	1.001333549	0.203515376	0.996069918
+# 0.582249871	0.997326755	0.682098056	0.989870686
+pfs_data <- readr::read_csv(
+  "data/Camrelizumab Luo 2021 - JAMA/camrelizumab_pfs.csv", # Replace with your path
+  skip = 2,
+  col_names = c("time_placebo", "surv_placebo",
+                "time_camr",    "surv_camr")
+)
+
+# Pivot to long, labeling groups
+pfs_long <- prepare_km_data(
+  km_data       = pfs_data,
+  time_cols     = c("time_placebo", "time_camr"),
+  surv_cols     = c("surv_placebo", "surv_camr"),
+  ref = "placebo",
+  group_labels  = c("Placebo", "Camrelizumab")
+)
+```
+
+Merge the OS and PFS data:
+```{r}
+# Merge endpoints
+df_km <- merge_endpoints(os_long, pfs_long)
+# # A tibble: 398 × 4
+#    group    time    os   pfs
+#    <fct>   <dbl> <dbl> <dbl>
+#  1 Placebo 0     1     1    
+#  2 Placebo 0.112 1     1.00
+
+```
+
+Plot the digitized data and compare with the original KM curves of
+@luo2021 
+([Figure 2](https://cdn.jamanetwork.com/ama/content_public/journal/jama/938771/joi210086f2_1631212840.67618.png?Expires=1742906986&Signature=WCvbxcuOTh8hPw~iEh2XWTNts3Pz7nUT7PohXwdZZYqGDMfjAiYi5E~UCPFkZNQVJH7X01c4SzFLqV-q6EBpTdfxKDBJ49kk-oXN9JcsQZ1gvGgPRwhm0j-a6SVDPNCsifiOPEY3dyc0Qcj0d2pXChb51nNA1luMmDM9ngPAdBPy5cLVm9~Ao0TC9mzWD2cRrTbpD82YCwVQ8ukSieJWMsv9zoNjKjw0hnXgSNuAu6J6dWMH61P9LRPDTvpI6fgBYoD4h6Xo7aERiRMgh8ExIGZQgwBmNCJBcupPRu-10NTHH4BnLgM-eitKI0EG96a0pRDVy8mDe5FzqwtmfuQPvw__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA)):
+```{r}
+#| code-fold: true
+#| code-summary: Plot KM curves
+#| eval: true
+#| fig-width: 6
+#| fig-height: 4
+
+# Plot the KM curves and compare with the published ones
+df_km |> 
+  ggplot(aes(x = time, y = os, color = group)) +
+  geom_step(aes(linetype = "OS"), linewidth = 0.8) +
+  geom_step(aes(y = pfs, linetype = "PFS"), linewidth = 0.8) +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  scale_x_continuous(limits = c(0, 18), breaks = seq(0, 18, by = 2), expand = expansion(c(0,0))) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2), expand = expansion(c(0,0))) +
+  scale_color_jama() +
+  scale_linetype_manual(NULL, values = 1:2) +
+  labs(
+    title = "Camrelizumab trial",
+    x = "Time (months)",
+    y = "Survival probability",
+    color = NULL
+  )  +
+  theme_classic() +
+  theme(
+    panel.grid.major.y = element_line(),
+    legend.position = c(1, 1),
+    legend.justification = c(1, 1),
+    legend.key.width = unit(1, "cm")
+  )
+```
+
+### Input the risk tables
+
 
 
 

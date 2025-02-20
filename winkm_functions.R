@@ -558,7 +558,8 @@ compute_win_loss <- function(df_inc,
     loss_os = cummax(loss_os),
     win = cummax(win),
     loss = cummax(loss)
-  )
+  ) |>
+    select(time, win_os, loss_os, win_pd, loss_pd, win, loss)
 
   # Finally, return df_wl from whichever block was executed
   return(df_wl)
