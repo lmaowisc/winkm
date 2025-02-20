@@ -334,7 +334,7 @@ win_odds <- function(win, loss) {
 }
 
 # Specify time points
-t0 <- c(6, 12, 18) # Selected months
+t0 <- seq(6, 18, by = 3) # Selected months
 # Compute win ratio at t0
 stats <- tibble(
   t0,                              # Time points
@@ -355,8 +355,8 @@ stats <- tibble(
   ) |> 
   select(
     t0, 
-    win_ratio_os, win_odds_os, net_benefit_os,
-    win_ratio, win_odds, net_benefit
+    win_os, loss_os, win_ratio_os, win_odds_os, net_benefit_os,
+    win, loss, win_ratio, win_odds, net_benefit
   )
 
 # For table display
@@ -364,12 +364,11 @@ library(knitr)
 # Print the table
 stats |> 
   kable(format = "html", digits = 2, caption = "Win-loss statistics at selected time points",
-        col.names = c("Time (months)", "Win ratio (OS)", "Win odds (OS)", "Net benefit (OS)",
-                      "Win ratio", "Win odds", "Net benefit")
+        col.names = c("Time (months)", "Win (OS)", "Loss (OS)", "WR (OS)", "WO (OS)", "NB (OS)", "Win", "Loss", "WR", "WO", "NB")
         )
-
-
 ```
+
+-   WR: Win ratio; WO: Win odds; NB: Net benefit.
 
 Interestingly, the inverse of 18-month win ratio for OS is 1/1.39=0.72, which is close to the hazard ratio of 0.70 reported in the paper. This is expected when the PH assumption is true [@oakes2016].
 

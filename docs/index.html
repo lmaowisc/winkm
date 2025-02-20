@@ -550,7 +550,7 @@ window.Quarto = {
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify time points</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>t0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">12</span>, <span class="dv">18</span>) <span class="co"># Selected months</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>t0 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">6</span>, <span class="dv">18</span>, <span class="at">by =</span> <span class="dv">3</span>) <span class="co"># Selected months</span></span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute win ratio at t0</span></span>
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  t0,                              <span class="co"># Time points</span></span>
@@ -571,8 +571,8 @@ window.Quarto = {
 <span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
 <span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    t0, </span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    win_ratio_os, win_odds_os, net_benefit_os,</span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>    win_ratio, win_odds, net_benefit</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    win_os, loss_os, win_ratio_os, win_odds_os, net_benefit_os,</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>    win, loss, win_ratio, win_odds, net_benefit</span>
 <span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="co"># For table display</span></span>
@@ -580,9 +580,8 @@ window.Quarto = {
 <span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the table</span></span>
 <span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>stats <span class="sc">|&gt;</span> </span>
 <span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">format =</span> <span class="st">"html"</span>, <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">caption =</span> <span class="st">"Win-loss statistics at selected time points"</span>,</span>
-<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Time (months)"</span>, <span class="st">"Win ratio (OS)"</span>, <span class="st">"Win odds (OS)"</span>, <span class="st">"Net benefit (OS)"</span>,</span>
-<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Win ratio"</span>, <span class="st">"Win odds"</span>, <span class="st">"Net benefit"</span>)</span>
-<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Time (months)"</span>, <span class="st">"Win (OS)"</span>, <span class="st">"Loss (OS)"</span>, <span class="st">"WR (OS)"</span>, <span class="st">"WO (OS)"</span>, <span class="st">"NB (OS)"</span>, <span class="st">"Win"</span>, <span class="st">"Loss"</span>, <span class="st">"WR"</span>, <span class="st">"WO"</span>, <span class="st">"NB"</span>)</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
@@ -590,38 +589,80 @@ window.Quarto = {
 <thead>
 <tr class="header">
 <th style="text-align: right;" data-quarto-table-cell-role="th">Time (months)</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Win ratio (OS)</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Win odds (OS)</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Net benefit (OS)</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Win ratio</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Win odds</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Net benefit</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Win (OS)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Loss (OS)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">WR (OS)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">WO (OS)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NB (OS)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Win</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Loss</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">WR</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">WO</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NB</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">6</td>
+<td style="text-align: right;">0.14</td>
+<td style="text-align: right;">0.10</td>
 <td style="text-align: right;">1.36</td>
 <td style="text-align: right;">1.08</td>
 <td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.46</td>
+<td style="text-align: right;">0.31</td>
 <td style="text-align: right;">1.46</td>
 <td style="text-align: right;">1.34</td>
 <td style="text-align: right;">0.14</td>
 </tr>
 <tr class="even">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0.27</td>
+<td style="text-align: right;">0.21</td>
+<td style="text-align: right;">1.32</td>
+<td style="text-align: right;">1.14</td>
+<td style="text-align: right;">0.07</td>
+<td style="text-align: right;">0.57</td>
+<td style="text-align: right;">0.37</td>
+<td style="text-align: right;">1.55</td>
+<td style="text-align: right;">1.51</td>
+<td style="text-align: right;">0.20</td>
+</tr>
+<tr class="odd">
 <td style="text-align: right;">12</td>
+<td style="text-align: right;">0.40</td>
+<td style="text-align: right;">0.29</td>
 <td style="text-align: right;">1.40</td>
 <td style="text-align: right;">1.26</td>
 <td style="text-align: right;">0.11</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">0.38</td>
 <td style="text-align: right;">1.55</td>
 <td style="text-align: right;">1.54</td>
 <td style="text-align: right;">0.21</td>
 </tr>
+<tr class="even">
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">0.47</td>
+<td style="text-align: right;">0.33</td>
+<td style="text-align: right;">1.41</td>
+<td style="text-align: right;">1.31</td>
+<td style="text-align: right;">0.14</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">0.40</td>
+<td style="text-align: right;">1.51</td>
+<td style="text-align: right;">1.50</td>
+<td style="text-align: right;">0.20</td>
+</tr>
 <tr class="odd">
 <td style="text-align: right;">18</td>
+<td style="text-align: right;">0.51</td>
+<td style="text-align: right;">0.36</td>
 <td style="text-align: right;">1.39</td>
 <td style="text-align: right;">1.33</td>
 <td style="text-align: right;">0.14</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">0.40</td>
 <td style="text-align: right;">1.48</td>
 <td style="text-align: right;">1.48</td>
 <td style="text-align: right;">0.19</td>
@@ -632,6 +673,9 @@ window.Quarto = {
 
 </div>
 </div>
+<ul>
+<li>WR: Win ratio; WO: Win odds; NB: Net benefit.</li>
+</ul>
 <p>Interestingly, the inverse of 18-month win ratio for OS is 1/1.39=0.72, which is close to the hazard ratio of 0.70 reported in the paper. This is expected when the PH assumption is true <span class="citation" data-cites="oakes2016">(<a href="#ref-oakes2016" role="doc-biblioref">Oakes 2016</a>)</span>.</p>
 </section>
 </section>
