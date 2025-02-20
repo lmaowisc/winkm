@@ -1,3 +1,262 @@
 ---
-title: "Workflow"
+title: "Main steps in extracting win-loss measures"
+subtitle: "Step-by-step vs. all-in-one"
+execute:
+  eval: false
+bibliography: references.bib
 ---
+
+This document outlines two approaches to calculating win-loss statistics
+using KM and summary data:
+
+(1) A **step-by-step** approach calling the following functions in turn:
+
+- `prepare_km_data()` to read and clean digitized KM data.
+- `merge_endpoints()` to align OS and PFS on a common time grid.
+- `compute_increments()` to calculate small increments/decrements for OS/PFS needed
+to calculate win-loss probabilities [@oakes2016].
+- `compute_followup()` to derive total follow-up times from at-risk tables.
+- `compute_theta()` to compute association parameters ($\theta$) between the two endpoints.
+- `compute_win_loss()` to calculate final win/loss probabilities with or without $\theta$.
+
+(2) An **all-in-one** approach using `run_win_loss_workflow()` as a single wrapper that runs all of the above steps at once.
+
+---
+
+## Step-by-step approach
+
+### 1. Data preparation: `prepare_km_data()`
+
+**Purpose:**  Read and clean digitized KM data.
+
+**Main Inputs:**
+
+- `km_data`: A data frame in wide format, typically read from a CSV containing digitized times and survival probabilities for multiple groups.
+- `time_cols`: Character vector of column names that contain the time values for each group (e.g. `"time_placebo", "time_camr"`).
+- `surv_cols`: Character vector of column names that contain the survival probabilities for each group (e.g. `"surv_placebo", "surv_camr"`).
+- `ref`: (Optional) A character string indicating which group is the reference (control).
+- `group_labels`: (Optional) A character vector to rename the group factors (must match the number of unique groups).  
+- `zero_time`: (Logical) If `TRUE`, adds (time=0, surv=1) for each group.
+
+**Output:**  A tibble with columns:
+
+- `group`: Factor indicating treatment/control groups.
+- `time`: Time points (including 0 if `zero_time=TRUE`).
+- `surv`: Survival probability at each time (forced non-increasing by group).
+- Optionally reordered factor levels if `ref` is used.
+
+**Example Usage:**
+
+```{r}
+# For OS data
+os_long <- prepare_km_data(
+  km_data      = os_data,
+  time_cols    = c("time_placebo", "time_camr"),
+  surv_cols    = c("surv_placebo", "surv_camr"),
+  ref          = "placebo",
+  group_labels = c("Placebo", "Camrelizumab"),
+  zero_time    = TRUE
+)
+# For PFS data
+pfs_long <- prepare_km_data(
+  km_data      = pfs_data,
+  time_cols    = c("time_placebo", "time_camr"),
+  surv_cols    = c("surv_placebo", "surv_camr"),
+  ref          = "placebo",
+  group_labels = c("Placebo", "Camrelizumab"),
+  zero_time    = TRUE
+)
+```
+
+### 2. Merge endpoints: `merge_endpoints()`
+
+**Purpose:** Combine two sets of KM data (e.g. OS and PFS) onto a common time grid.
+
+**Main Inputs:**
+
+-   `os_data_long`: A long-format tibble, typically from prepare_km_data(), containing OS.
+-   `pfs_data_long`: A long-format tibble, similarly structured, containing PFS.
+-   `extra_times`: (Optional) Numeric vector of additional time points to include in the merged grid.
+
+**Output:** A tibble with columns:
+
+-   `group`: Group identifier (same factor levels as inputs).
+-   `time`: Combined and sorted time points from OS and PFS.
+-   `os, pfs`: Interpolated OS/PFS probabilities at each time.
+
+**Example Usage:**
+
+```{r}
+df_merged <- merge_endpoints(os_long, pfs_long)
+```
+
+### 3. Compute increments: `compute_increments()`
+
+**Purpose:** Compute small decrements in survival probabilities for OS and PFS
+in preparation for calculation of win-loss estimands [@oakes2016].
+
+**Main Inputs:**
+
+-   `df_km`: A long-format tibble with columns `group`, `time`, `os` $(\hat S(t))$, `pfs` $(\hat S^*(t))$ (e.g. from `merge_endpoints()`).
+
+**Output:** A tibble with additional columns:
+
+-   `os_p`: Previous (lagged) OS $(\hat S(t-))$.
+-   `dos`: Decrement in OS (`os_p` - `os`) $(\hat S(t-) - \hat S(t))$.
+-   `pfs_p`: Previous (lagged) PFS $(\hat S^*(t-))$.
+-   `dpfs`: Decrement in PFS (`pfs_p` - `pfs`) $(\hat S^*(t-) - \hat S^*(t))$.
+-   `dLpfs`: Hazard increment for PFS $\mathrm{d}\hat\Lambda^*(t)$.
+
+**Example Usage:**
+
+```{r}
+df_increments <- compute_increments(df_merged)
+```
+
+### 4. Compute follow-up times: `compute_followup()`
+
+**Purpose:** Compute the total person-time (follow-up) by endpoint and group from a risk table.
+
+**Main Inputs:**
+
+-   `risk_table`: Data frame of at-risk numbers in wide format, with columns:
+    -   A `time` column.
+    -   An `endpoint` column (e.g., "os"/"pfs").
+    -   Two columns for group-specific at-risk counts.
+-   `time_col`: (Default = "time") Name of the time column.
+-   `endpoint_col`: (Default = "endpoint") Name of the endpoint column.
+-   `group_cols`: Character vector specifying which columns hold the at-risk counts.
+-   `group_labels`: (Optional) Renames the factor levels after pivoting wide $\to$ long.
+
+**Output:** A tibble with columns:
+
+-   `endpoint`: E.g. "os" or "pfs".
+-   `group`: Group label (factor).
+-   `total_followup`: Person-time computed for that group/endpoint.
+
+
+### 5. Compute association parameters: `compute_theta()`
+
+
+**Purpose:** Derive the association parameters $\theta$ 
+ using event counts (death & progression) and total follow-up times.
+
+**Main Inputs:**
+
+-   `event_nums_trt`: Named numeric vector for the treatment arm in the form `c(ND=..., NP=..., Ns=...)` for OS, progression, and PFS endpoint counts, respectively.
+-   `event_nums_ctr`: Similar vector for the control arm.
+-   `fl_times`: Tibble of total follow-up times (from compute_followup()).
+-   `ref`: (Optional) Reference group’s label in `fl_times$group`.
+
+**Output:** A numeric vector of length 2:
+
+-   `theta_trt`: Association parameter for treatment group.
+-   `theta_ctr`: Association parameter for control group.
+
+**Example Usage:**
+
+```{r}
+theta_vec <- compute_theta(
+  event_nums_trt = c(ND = 135, NP = 144, Ns = 199),
+  event_nums_ctr = c(ND = 174, NP = 193, Ns = 229),
+  fl_times       = fl_times,
+  ref            = "Placebo"
+)
+```
+
+### 6. Compute win-loss probabilities: `compute_win_loss()`
+
+**Purpose:** Calculate time-varying win/loss probabilities from OS and PFS, optionally using association parameters $\theta$.
+
+**Main Inputs:**
+
+-   `df_inc`: Data frame of increments (from compute_increments()).
+-   `event_nums_trt`, event_nums_ctr: Named numeric vectors with death/progression counts.
+-   `ref`: (Optional but important) Reference group label in `df_inc`. This determines how win-loss is defined.
+-   `theta`: (Optional) Numeric vector from `compute_theta()`. If `NULL`, a simpler approach is used assuming independent endpoints, which may be inaccurate.
+
+
+**Output:** A tibble with:
+
+-   `time`: Time points.
+-   `win_os`, `loss_os`: Win/loss from OS.
+-   `win_pd`, `loss_pd`: Win/loss from PFS (when OS is tied).
+-   `win`, `loss`: Overall win/loss.
+
+**Example Usage:**
+
+```{r}
+df_wl <- compute_win_loss(
+  df_inc         = df_increments,
+  event_nums_trt = c(ND=135, NP=144, Ns=199),
+  event_nums_ctr = c(ND=174, NP=193, Ns=229),
+  ref            = "Placebo",
+  theta          = theta_vec
+)
+
+```
+
+
+
+
+## All-in-one approach: `run_win_loss_workflow()`
+
+**Purpose:** Perform all the above steps in a single function call.
+
+**Main Inputs:** (selected)
+
+-   `os_file`, `pfs_file`: (Optional) CSV files for OS/PFS digitized data.
+-   `os_data`, `pfs_data`: (Optional) Alternatively, already-loaded data frames for OS/PFS.
+-   `event_nums_trt`, `event_nums_ctr`: Named numeric vectors of death/progression/PFS counts.
+-   `ref_group`, `ref_group_labelled`: Reference group name before/after labeling.
+-   `compute_theta`: If `TRUE`, also reads risk-table data and computes $\theta$.
+-   `risk_table_file`, `risk_table_data`: (Optional) CSV or data frame with at-risk numbers.
+-   `group_cols_at_risk`, `group_labels_at_risk`: Columns and labels for pivoting the risk table.
+
+**Output:** A list containing:
+
+-   `os_long`, `pfs_long`: Pivoted OS/PFS data.
+-   `df_merged`: Merged OS/PFS tibble.
+-   `df_increments`: The increments tibble.
+-   `theta`: Computed $\theta$ parameters (if requested).
+-   `df_wl`: Final win/loss tibble from `compute_win_loss()`.
+
+**Example Usage:**
+
+```{r}
+# Example usage:
+results <- run_win_loss_workflow(
+  # Optionally specify input files or data frames
+  os_file        = "camrelizumab_os.csv",
+  pfs_file       = "camrelizumab_pfs.csv",
+
+  # Event counts
+  event_nums_trt = c(ND=135, NP=144, Ns=199),
+  event_nums_ctr = c(ND=174, NP=193, Ns=229),
+
+  # Reference group labeling
+  ref_group        = "placebo",
+  ref_group_labelled = "Placebo",
+
+  # Merge OS/PFS & compute increments
+  merge_os_pfs   = TRUE,
+
+  # Compute theta using risk table
+  compute_theta  = TRUE,
+  risk_table_file   = "risk_table.csv",
+  group_cols_at_risk   = c("placebo_chemo", "camr_chemo"),
+  group_labels_at_risk = c("Placebo", "Camrelizumab")
+)
+
+# 'results' is a list:
+# - results$os_long
+# - results$pfs_long
+# - results$df_merged
+# - results$df_increments
+# - results$theta
+# - results$df_wl
+
+```
+
+
+## References

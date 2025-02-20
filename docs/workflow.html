@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Workflow – WinKM</title>
+<title>Main steps in extracting win-loss measures – WinKM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -67,6 +121,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -115,15 +198,32 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#step-by-step-approach" id="toc-step-by-step-approach" class="nav-link active" data-scroll-target="#step-by-step-approach">Step-by-step approach</a>
+  <ul class="collapse">
+  <li><a href="#data-preparation-prepare_km_data" id="toc-data-preparation-prepare_km_data" class="nav-link" data-scroll-target="#data-preparation-prepare_km_data">1. Data preparation: <code>prepare_km_data()</code></a></li>
+  <li><a href="#merge-endpoints-merge_endpoints" id="toc-merge-endpoints-merge_endpoints" class="nav-link" data-scroll-target="#merge-endpoints-merge_endpoints">2. Merge endpoints: <code>merge_endpoints()</code></a></li>
+  <li><a href="#compute-increments-compute_increments" id="toc-compute-increments-compute_increments" class="nav-link" data-scroll-target="#compute-increments-compute_increments">3. Compute increments: <code>compute_increments()</code></a></li>
+  <li><a href="#compute-follow-up-times-compute_followup" id="toc-compute-follow-up-times-compute_followup" class="nav-link" data-scroll-target="#compute-follow-up-times-compute_followup">4. Compute follow-up times: <code>compute_followup()</code></a></li>
+  <li><a href="#compute-association-parameters-compute_theta" id="toc-compute-association-parameters-compute_theta" class="nav-link" data-scroll-target="#compute-association-parameters-compute_theta">5. Compute association parameters: <code>compute_theta()</code></a></li>
+  <li><a href="#compute-win-loss-probabilities-compute_win_loss" id="toc-compute-win-loss-probabilities-compute_win_loss" class="nav-link" data-scroll-target="#compute-win-loss-probabilities-compute_win_loss">6. Compute win-loss probabilities: <code>compute_win_loss()</code></a></li>
+  </ul></li>
+  <li><a href="#all-in-one-approach-run_win_loss_workflow" id="toc-all-in-one-approach-run_win_loss_workflow" class="nav-link" data-scroll-target="#all-in-one-approach-run_win_loss_workflow">All-in-one approach: <code>run_win_loss_workflow()</code></a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Workflow</h1>
+<h1 class="title">Main steps in extracting win-loss measures</h1>
+<p class="subtitle lead">Step-by-step vs.&nbsp;all-in-one</p>
 </div>
 
 
@@ -140,10 +240,251 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>This document outlines two approaches to calculating win-loss statistics using KM and summary data:</p>
+<ol type="1">
+<li>A <strong>step-by-step</strong> approach calling the following functions in turn:</li>
+</ol>
+<ul>
+<li><code>prepare_km_data()</code> to read and clean digitized KM data.</li>
+<li><code>merge_endpoints()</code> to align OS and PFS on a common time grid.</li>
+<li><code>compute_increments()</code> to calculate small increments/decrements for OS/PFS needed to calculate win-loss probabilities <span class="citation" data-cites="oakes2016">(<a href="#ref-oakes2016" role="doc-biblioref">Oakes 2016</a>)</span>.</li>
+<li><code>compute_followup()</code> to derive total follow-up times from at-risk tables.</li>
+<li><code>compute_theta()</code> to compute association parameters (<span class="math inline">\(\theta\)</span>) between the two endpoints.</li>
+<li><code>compute_win_loss()</code> to calculate final win/loss probabilities with or without <span class="math inline">\(\theta\)</span>.</li>
+</ul>
+<ol start="2" type="1">
+<li>An <strong>all-in-one</strong> approach using <code>run_win_loss_workflow()</code> as a single wrapper that runs all of the above steps at once.</li>
+</ol>
+<hr>
+<section id="step-by-step-approach" class="level2">
+<h2 class="anchored" data-anchor-id="step-by-step-approach">Step-by-step approach</h2>
+<section id="data-preparation-prepare_km_data" class="level3">
+<h3 class="anchored" data-anchor-id="data-preparation-prepare_km_data">1. Data preparation: <code>prepare_km_data()</code></h3>
+<p><strong>Purpose:</strong> Read and clean digitized KM data.</p>
+<p><strong>Main Inputs:</strong></p>
+<ul>
+<li><code>km_data</code>: A data frame in wide format, typically read from a CSV containing digitized times and survival probabilities for multiple groups.</li>
+<li><code>time_cols</code>: Character vector of column names that contain the time values for each group (e.g.&nbsp;<code>"time_placebo", "time_camr"</code>).</li>
+<li><code>surv_cols</code>: Character vector of column names that contain the survival probabilities for each group (e.g.&nbsp;<code>"surv_placebo", "surv_camr"</code>).</li>
+<li><code>ref</code>: (Optional) A character string indicating which group is the reference (control).</li>
+<li><code>group_labels</code>: (Optional) A character vector to rename the group factors (must match the number of unique groups).<br>
+</li>
+<li><code>zero_time</code>: (Logical) If <code>TRUE</code>, adds (time=0, surv=1) for each group.</li>
+</ul>
+<p><strong>Output:</strong> A tibble with columns:</p>
+<ul>
+<li><code>group</code>: Factor indicating treatment/control groups.</li>
+<li><code>time</code>: Time points (including 0 if <code>zero_time=TRUE</code>).</li>
+<li><code>surv</code>: Survival probability at each time (forced non-increasing by group).</li>
+<li>Optionally reordered factor levels if <code>ref</code> is used.</li>
+</ul>
+<p><strong>Example Usage:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For OS data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>os_long <span class="ot">&lt;-</span> <span class="fu">prepare_km_data</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">km_data      =</span> os_data,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_cols    =</span> <span class="fu">c</span>(<span class="st">"time_placebo"</span>, <span class="st">"time_camr"</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">surv_cols    =</span> <span class="fu">c</span>(<span class="st">"surv_placebo"</span>, <span class="st">"surv_camr"</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref          =</span> <span class="st">"placebo"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_labels =</span> <span class="fu">c</span>(<span class="st">"Placebo"</span>, <span class="st">"Camrelizumab"</span>),</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">zero_time    =</span> <span class="cn">TRUE</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># For PFS data</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>pfs_long <span class="ot">&lt;-</span> <span class="fu">prepare_km_data</span>(</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">km_data      =</span> pfs_data,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_cols    =</span> <span class="fu">c</span>(<span class="st">"time_placebo"</span>, <span class="st">"time_camr"</span>),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">surv_cols    =</span> <span class="fu">c</span>(<span class="st">"surv_placebo"</span>, <span class="st">"surv_camr"</span>),</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref          =</span> <span class="st">"placebo"</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_labels =</span> <span class="fu">c</span>(<span class="st">"Placebo"</span>, <span class="st">"Camrelizumab"</span>),</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">zero_time    =</span> <span class="cn">TRUE</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="merge-endpoints-merge_endpoints" class="level3">
+<h3 class="anchored" data-anchor-id="merge-endpoints-merge_endpoints">2. Merge endpoints: <code>merge_endpoints()</code></h3>
+<p><strong>Purpose:</strong> Combine two sets of KM data (e.g.&nbsp;OS and PFS) onto a common time grid.</p>
+<p><strong>Main Inputs:</strong></p>
+<ul>
+<li><code>os_data_long</code>: A long-format tibble, typically from prepare_km_data(), containing OS.</li>
+<li><code>pfs_data_long</code>: A long-format tibble, similarly structured, containing PFS.</li>
+<li><code>extra_times</code>: (Optional) Numeric vector of additional time points to include in the merged grid.</li>
+</ul>
+<p><strong>Output:</strong> A tibble with columns:</p>
+<ul>
+<li><code>group</code>: Group identifier (same factor levels as inputs).</li>
+<li><code>time</code>: Combined and sorted time points from OS and PFS.</li>
+<li><code>os, pfs</code>: Interpolated OS/PFS probabilities at each time.</li>
+</ul>
+<p><strong>Example Usage:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df_merged <span class="ot">&lt;-</span> <span class="fu">merge_endpoints</span>(os_long, pfs_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="compute-increments-compute_increments" class="level3">
+<h3 class="anchored" data-anchor-id="compute-increments-compute_increments">3. Compute increments: <code>compute_increments()</code></h3>
+<p><strong>Purpose:</strong> Compute small decrements in survival probabilities for OS and PFS in preparation for calculation of win-loss estimands <span class="citation" data-cites="oakes2016">(<a href="#ref-oakes2016" role="doc-biblioref">Oakes 2016</a>)</span>.</p>
+<p><strong>Main Inputs:</strong></p>
+<ul>
+<li><code>df_km</code>: A long-format tibble with columns <code>group</code>, <code>time</code>, <code>os</code> <span class="math inline">\((\hat S(t))\)</span>, <code>pfs</code> <span class="math inline">\((\hat S^*(t))\)</span> (e.g.&nbsp;from <code>merge_endpoints()</code>).</li>
+</ul>
+<p><strong>Output:</strong> A tibble with additional columns:</p>
+<ul>
+<li><code>os_p</code>: Previous (lagged) OS <span class="math inline">\((\hat S(t-))\)</span>.</li>
+<li><code>dos</code>: Decrement in OS (<code>os_p</code> - <code>os</code>) <span class="math inline">\((\hat S(t-) - \hat S(t))\)</span>.</li>
+<li><code>pfs_p</code>: Previous (lagged) PFS <span class="math inline">\((\hat S^*(t-))\)</span>.</li>
+<li><code>dpfs</code>: Decrement in PFS (<code>pfs_p</code> - <code>pfs</code>) <span class="math inline">\((\hat S^*(t-) - \hat S^*(t))\)</span>.</li>
+<li><code>dLpfs</code>: Hazard increment for PFS <span class="math inline">\(\mathrm{d}\hat\Lambda^*(t)\)</span>.</li>
+</ul>
+<p><strong>Example Usage:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df_increments <span class="ot">&lt;-</span> <span class="fu">compute_increments</span>(df_merged)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="compute-follow-up-times-compute_followup" class="level3">
+<h3 class="anchored" data-anchor-id="compute-follow-up-times-compute_followup">4. Compute follow-up times: <code>compute_followup()</code></h3>
+<p><strong>Purpose:</strong> Compute the total person-time (follow-up) by endpoint and group from a risk table.</p>
+<p><strong>Main Inputs:</strong></p>
+<ul>
+<li><code>risk_table</code>: Data frame of at-risk numbers in wide format, with columns:
+<ul>
+<li>A <code>time</code> column.</li>
+<li>An <code>endpoint</code> column (e.g., “os”/“pfs”).</li>
+<li>Two columns for group-specific at-risk counts.</li>
+</ul></li>
+<li><code>time_col</code>: (Default = “time”) Name of the time column.</li>
+<li><code>endpoint_col</code>: (Default = “endpoint”) Name of the endpoint column.</li>
+<li><code>group_cols</code>: Character vector specifying which columns hold the at-risk counts.</li>
+<li><code>group_labels</code>: (Optional) Renames the factor levels after pivoting wide <span class="math inline">\(\to\)</span> long.</li>
+</ul>
+<p><strong>Output:</strong> A tibble with columns:</p>
+<ul>
+<li><code>endpoint</code>: E.g. “os” or “pfs”.</li>
+<li><code>group</code>: Group label (factor).</li>
+<li><code>total_followup</code>: Person-time computed for that group/endpoint.</li>
+</ul>
+</section>
+<section id="compute-association-parameters-compute_theta" class="level3">
+<h3 class="anchored" data-anchor-id="compute-association-parameters-compute_theta">5. Compute association parameters: <code>compute_theta()</code></h3>
+<p><strong>Purpose:</strong> Derive the association parameters <span class="math inline">\(\theta\)</span> using event counts (death &amp; progression) and total follow-up times.</p>
+<p><strong>Main Inputs:</strong></p>
+<ul>
+<li><code>event_nums_trt</code>: Named numeric vector for the treatment arm in the form <code>c(ND=..., NP=..., Ns=...)</code> for OS, progression, and PFS endpoint counts, respectively.</li>
+<li><code>event_nums_ctr</code>: Similar vector for the control arm.</li>
+<li><code>fl_times</code>: Tibble of total follow-up times (from compute_followup()).</li>
+<li><code>ref</code>: (Optional) Reference group’s label in <code>fl_times$group</code>.</li>
+</ul>
+<p><strong>Output:</strong> A numeric vector of length 2:</p>
+<ul>
+<li><code>theta_trt</code>: Association parameter for treatment group.</li>
+<li><code>theta_ctr</code>: Association parameter for control group.</li>
+</ul>
+<p><strong>Example Usage:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>theta_vec <span class="ot">&lt;-</span> <span class="fu">compute_theta</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">event_nums_trt =</span> <span class="fu">c</span>(<span class="at">ND =</span> <span class="dv">135</span>, <span class="at">NP =</span> <span class="dv">144</span>, <span class="at">Ns =</span> <span class="dv">199</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">event_nums_ctr =</span> <span class="fu">c</span>(<span class="at">ND =</span> <span class="dv">174</span>, <span class="at">NP =</span> <span class="dv">193</span>, <span class="at">Ns =</span> <span class="dv">229</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fl_times       =</span> fl_times,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref            =</span> <span class="st">"Placebo"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="compute-win-loss-probabilities-compute_win_loss" class="level3">
+<h3 class="anchored" data-anchor-id="compute-win-loss-probabilities-compute_win_loss">6. Compute win-loss probabilities: <code>compute_win_loss()</code></h3>
+<p><strong>Purpose:</strong> Calculate time-varying win/loss probabilities from OS and PFS, optionally using association parameters <span class="math inline">\(\theta\)</span>.</p>
+<p><strong>Main Inputs:</strong></p>
+<ul>
+<li><code>df_inc</code>: Data frame of increments (from compute_increments()).</li>
+<li><code>event_nums_trt</code>, event_nums_ctr: Named numeric vectors with death/progression counts.</li>
+<li><code>ref</code>: (Optional but important) Reference group label in <code>df_inc</code>. This determines how win-loss is defined.</li>
+<li><code>theta</code>: (Optional) Numeric vector from <code>compute_theta()</code>. If <code>NULL</code>, a simpler approach is used assuming independent endpoints, which may be inaccurate.</li>
+</ul>
+<p><strong>Output:</strong> A tibble with:</p>
+<ul>
+<li><code>time</code>: Time points.</li>
+<li><code>win_os</code>, <code>loss_os</code>: Win/loss from OS.</li>
+<li><code>win_pd</code>, <code>loss_pd</code>: Win/loss from PFS (when OS is tied).</li>
+<li><code>win</code>, <code>loss</code>: Overall win/loss.</li>
+</ul>
+<p><strong>Example Usage:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df_wl <span class="ot">&lt;-</span> <span class="fu">compute_win_loss</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">df_inc         =</span> df_increments,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">event_nums_trt =</span> <span class="fu">c</span>(<span class="at">ND=</span><span class="dv">135</span>, <span class="at">NP=</span><span class="dv">144</span>, <span class="at">Ns=</span><span class="dv">199</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">event_nums_ctr =</span> <span class="fu">c</span>(<span class="at">ND=</span><span class="dv">174</span>, <span class="at">NP=</span><span class="dv">193</span>, <span class="at">Ns=</span><span class="dv">229</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref            =</span> <span class="st">"Placebo"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">theta          =</span> theta_vec</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="all-in-one-approach-run_win_loss_workflow" class="level2">
+<h2 class="anchored" data-anchor-id="all-in-one-approach-run_win_loss_workflow">All-in-one approach: <code>run_win_loss_workflow()</code></h2>
+<p><strong>Purpose:</strong> Perform all the above steps in a single function call.</p>
+<p><strong>Main Inputs:</strong> (selected)</p>
+<ul>
+<li><code>os_file</code>, <code>pfs_file</code>: (Optional) CSV files for OS/PFS digitized data.</li>
+<li><code>os_data</code>, <code>pfs_data</code>: (Optional) Alternatively, already-loaded data frames for OS/PFS.</li>
+<li><code>event_nums_trt</code>, <code>event_nums_ctr</code>: Named numeric vectors of death/progression/PFS counts.</li>
+<li><code>ref_group</code>, <code>ref_group_labelled</code>: Reference group name before/after labeling.</li>
+<li><code>compute_theta</code>: If <code>TRUE</code>, also reads risk-table data and computes <span class="math inline">\(\theta\)</span>.</li>
+<li><code>risk_table_file</code>, <code>risk_table_data</code>: (Optional) CSV or data frame with at-risk numbers.</li>
+<li><code>group_cols_at_risk</code>, <code>group_labels_at_risk</code>: Columns and labels for pivoting the risk table.</li>
+</ul>
+<p><strong>Output:</strong> A list containing:</p>
+<ul>
+<li><code>os_long</code>, <code>pfs_long</code>: Pivoted OS/PFS data.</li>
+<li><code>df_merged</code>: Merged OS/PFS tibble.</li>
+<li><code>df_increments</code>: The increments tibble.</li>
+<li><code>theta</code>: Computed <span class="math inline">\(\theta\)</span> parameters (if requested).</li>
+<li><code>df_wl</code>: Final win/loss tibble from <code>compute_win_loss()</code>.</li>
+</ul>
+<p><strong>Example Usage:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example usage:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">run_win_loss_workflow</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Optionally specify input files or data frames</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">os_file        =</span> <span class="st">"camrelizumab_os.csv"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">pfs_file       =</span> <span class="st">"camrelizumab_pfs.csv"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Event counts</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">event_nums_trt =</span> <span class="fu">c</span>(<span class="at">ND=</span><span class="dv">135</span>, <span class="at">NP=</span><span class="dv">144</span>, <span class="at">Ns=</span><span class="dv">199</span>),</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">event_nums_ctr =</span> <span class="fu">c</span>(<span class="at">ND=</span><span class="dv">174</span>, <span class="at">NP=</span><span class="dv">193</span>, <span class="at">Ns=</span><span class="dv">229</span>),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Reference group labeling</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_group        =</span> <span class="st">"placebo"</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_group_labelled =</span> <span class="st">"Placebo"</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Merge OS/PFS &amp; compute increments</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">merge_os_pfs   =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute theta using risk table</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">compute_theta  =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">risk_table_file   =</span> <span class="st">"risk_table.csv"</span>,</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_cols_at_risk   =</span> <span class="fu">c</span>(<span class="st">"placebo_chemo"</span>, <span class="st">"camr_chemo"</span>),</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_labels_at_risk =</span> <span class="fu">c</span>(<span class="st">"Placebo"</span>, <span class="st">"Camrelizumab"</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 'results' is a list:</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co"># - results$os_long</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co"># - results$pfs_long</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co"># - results$df_merged</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co"># - results$df_increments</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co"># - results$theta</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co"># - results$df_wl</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="references" class="level2">
 
 
 
-</main> <!-- /main -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-oakes2016" class="csl-entry" role="listitem">
+Oakes, D. 2016. <span>“On the Win-Ratio Statistic in Clinical Trials with Multiple Types of Event.”</span> <em>Biometrika</em> 103 (3): 742–45. <a href="https://doi.org/10.1093/biomet/asw026">https://doi.org/10.1093/biomet/asw026</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
