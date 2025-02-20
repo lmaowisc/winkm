@@ -13,6 +13,8 @@ website:
         text: Workflow
       - href: case.qmd
         text: Case Studies
+      - href: papers.qmd
+        text: Papers
 
 format:
   html:

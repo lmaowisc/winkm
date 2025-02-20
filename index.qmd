@@ -7,31 +7,17 @@ execute:
 bibliography: references.bib
 ---
 
-
-
-**WinKM** provides a simple way to calculate win-loss statistics using
-summary data. This is useful when you have access to only published
-Kaplan-Meier (KM) curves of *overall survival* (OS) and nonfatal
-*event-free survival time* (EFS), but not the individual patient data,
-as is often the case in **systematic reviews** and **meta-analyses**.
+**WinKM** provides a simple way to calculate win-loss statistics using summary data. This is useful when you have access to only published Kaplan-Meier (KM) curves of *overall survival* (OS) and nonfatal *event-free survival time* (EFS), but not the individual patient data, as is often the case in **systematic reviews** and **meta-analyses**.
 
 ## Basic idea
 
-The basic idea is to consider the win and loss proportions by a certain
-time as a functional of the joint distribution of OS and EFS. Since we
-only have the marginal distributions through the KM curves, we will need
-to infer their associations via additional summary data like *total
-event counts and rates*.
+The basic idea is to consider the win and loss proportions by a certain time as a functional of the joint distribution of OS and EFS. Since we only have the marginal distributions through the KM curves, we will need to infer their associations via additional summary data like *total event counts and rates*.
 
 All in all, we need the following for each arm:
 
--   **KM estimates** for OS and EFS (obtained by scanning and digitizing
-    the curves using free online tools like
-    [WebPlotDigitizer](https://apps.automeris.io/wpd/);
--   **At-risk table** at selected time points (usually provided below
-    the KM curves);
--   **Total event counts** (reported in the CONSORT diagram or results
-    section):
+-   **KM estimates** for OS and EFS (obtained by scanning and digitizing the curves using free online tools like [WebPlotDigitizer](https://apps.automeris.io/wpd/);
+-   **At-risk table** at selected time points (usually provided below the KM curves);
+-   **Total event counts** (reported in the CONSORT diagram or results section):
     -   Deaths (OS);
     -   EFS endpoints (first of death/nonfatal event);
     -   Nonfatal event.
@@ -40,8 +26,7 @@ All in all, we need the following for each arm:
 
 ### Installation
 
-Download and compile the R functions from the `winkm_functions.R` script
-available at the [GitHub repository](https://github.com/lmaowisc/winkm).
+Download and compile the R functions from the `winkm_functions.R` script available at the [GitHub repository](https://github.com/lmaowisc/winkm).
 
 ```{r}
 source("winkm_functions.R")
@@ -62,27 +47,24 @@ source_dir <- "data/Camrelizumab Luo 2021 - JAMA/"
 # Copy the file
 file.copy(paste0(source_dir, "camrelizumab_os.csv"), paste0("docs/", "camrelizumab_os.csv"), overwrite = TRUE)
 file.copy(paste0(source_dir, "camrelizumab_pfs.csv"), paste0("docs/", "camrelizumab_pfs.csv"), overwrite = TRUE)
+file.copy(paste0(source_dir, "risk_table.csv"), paste0("docs/", "risk_table.csv"), overwrite = TRUE)
 # ?file.copy
 ```
 
-
-Consider the ESCORT-1st trial [@luo2021, open-access] that compares the efficacy of **camrelizumab**
-($N=298$) versus **placebo** ($N=298$) (both in combination with
-chemotherapy) in patients with advanced esophageal squamous cell
-carcinoma on the *co-primary endpoints* of
+Consider the ESCORT-1st trial [@luo2021, open-access] that compares the efficacy of **camrelizumab** ($N=298$) versus **placebo** ($N=298$) (both in combination with chemotherapy) in patients with advanced esophageal squamous cell carcinoma on the *co-primary endpoints* of
 
 -   **Overall survival** (OS);
 -   **Progression free survival** (PFS).
 
 ### Scan the KM curves
 
-The KM curves for OS and PFS are accessible in [Figure 2](https://cdn.jamanetwork.com/ama/content_public/journal/jama/938771/joi210086f2_1631212840.67618.png?Expires=1742906986&Signature=WCvbxcuOTh8hPw~iEh2XWTNts3Pz7nUT7PohXwdZZYqGDMfjAiYi5E~UCPFkZNQVJH7X01c4SzFLqV-q6EBpTdfxKDBJ49kk-oXN9JcsQZ1gvGgPRwhm0j-a6SVDPNCsifiOPEY3dyc0Qcj0d2pXChb51nNA1luMmDM9ngPAdBPy5cLVm9~Ao0TC9mzWD2cRrTbpD82YCwVQ8ukSieJWMsv9zoNjKjw0hnXgSNuAu6J6dWMH61P9LRPDTvpI6fgBYoD4h6Xo7aERiRMgh8ExIGZQgwBmNCJBcupPRu-10NTHH4BnLgM-eitKI0EG96a0pRDVy8mDe5FzqwtmfuQPvw__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA) of the original publication. I scanned the graphs using [WebPlotDigitizer](https://apps.automeris.io/wpd/) and stored the digitized
-data in:
+The KM curves for OS and PFS are accessible in [Figure 2](https://cdn.jamanetwork.com/ama/content_public/journal/jama/938771/joi210086f2_1631212840.67618.png?Expires=1742906986&Signature=WCvbxcuOTh8hPw~iEh2XWTNts3Pz7nUT7PohXwdZZYqGDMfjAiYi5E~UCPFkZNQVJH7X01c4SzFLqV-q6EBpTdfxKDBJ49kk-oXN9JcsQZ1gvGgPRwhm0j-a6SVDPNCsifiOPEY3dyc0Qcj0d2pXChb51nNA1luMmDM9ngPAdBPy5cLVm9~Ao0TC9mzWD2cRrTbpD82YCwVQ8ukSieJWMsv9zoNjKjw0hnXgSNuAu6J6dWMH61P9LRPDTvpI6fgBYoD4h6Xo7aERiRMgh8ExIGZQgwBmNCJBcupPRu-10NTHH4BnLgM-eitKI0EG96a0pRDVy8mDe5FzqwtmfuQPvw__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA) of the original publication. I scanned the graphs using [WebPlotDigitizer](https://apps.automeris.io/wpd/) and stored the digitized data in:
 
 -   [camrelizumab_os.csv](https://lmaowisc.github.io/winkm/camrelizumab_os.csv) for OS;
 -   [camrelizumab_pfs.csv](https://lmaowisc.github.io/winkm/camrelizumab_pfs.csv) for PFS.
 
 Read and clean OS data:
+
 ```{r}
 # Reading (OS) from CSV, skipping first 2 lines, specifying col_names manually
 # Data look like this:
@@ -135,6 +117,7 @@ pfs_long <- prepare_km_data(
 ```
 
 Merge the OS and PFS data:
+
 ```{r}
 # Merge endpoints
 df_km <- merge_endpoints(os_long, pfs_long)
@@ -144,11 +127,21 @@ df_km <- merge_endpoints(os_long, pfs_long)
 #  1 Placebo 0     1     1    
 #  2 Placebo 0.112 1     1.00
 
+# Compute increments of survival/cumulative hazard functions
+# in preparation for win-loss calculations
+df_increments <- compute_increments(df_km)
+# # A tibble: 398 × 9
+#    group    time    os   pfs  os_p       dos pfs_p      dpfs     dLpfs
+#    <fct>   <dbl> <dbl> <dbl> <dbl>     <dbl> <dbl>     <dbl>     <dbl>
+#  1 Placebo 0     1     1     1     0         1     0         0        
+#  2 Placebo 0.112 1     1.00  1     0         1     0         0        
+#  3 Placebo 0.179 1     1.00  1     0         1.00  0         0        
+#  4 Placebo 0.204 1.00  1.00  1     0.000366  1.00  0         0        
+#  5 Placebo 0.536 0.995 0.998 1.00  0.00491   1.00  0.00352   0.00352 
 ```
 
-Plot the digitized data and compare with the original KM curves of
-@luo2021 
-([Figure 2](https://cdn.jamanetwork.com/ama/content_public/journal/jama/938771/joi210086f2_1631212840.67618.png?Expires=1742906986&Signature=WCvbxcuOTh8hPw~iEh2XWTNts3Pz7nUT7PohXwdZZYqGDMfjAiYi5E~UCPFkZNQVJH7X01c4SzFLqV-q6EBpTdfxKDBJ49kk-oXN9JcsQZ1gvGgPRwhm0j-a6SVDPNCsifiOPEY3dyc0Qcj0d2pXChb51nNA1luMmDM9ngPAdBPy5cLVm9~Ao0TC9mzWD2cRrTbpD82YCwVQ8ukSieJWMsv9zoNjKjw0hnXgSNuAu6J6dWMH61P9LRPDTvpI6fgBYoD4h6Xo7aERiRMgh8ExIGZQgwBmNCJBcupPRu-10NTHH4BnLgM-eitKI0EG96a0pRDVy8mDe5FzqwtmfuQPvw__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA)):
+Plot the digitized data and compare with the original KM curves of @luo2021 ([Figure 2](https://cdn.jamanetwork.com/ama/content_public/journal/jama/938771/joi210086f2_1631212840.67618.png?Expires=1742906986&Signature=WCvbxcuOTh8hPw~iEh2XWTNts3Pz7nUT7PohXwdZZYqGDMfjAiYi5E~UCPFkZNQVJH7X01c4SzFLqV-q6EBpTdfxKDBJ49kk-oXN9JcsQZ1gvGgPRwhm0j-a6SVDPNCsifiOPEY3dyc0Qcj0d2pXChb51nNA1luMmDM9ngPAdBPy5cLVm9~Ao0TC9mzWD2cRrTbpD82YCwVQ8ukSieJWMsv9zoNjKjw0hnXgSNuAu6J6dWMH61P9LRPDTvpI6fgBYoD4h6Xo7aERiRMgh8ExIGZQgwBmNCJBcupPRu-10NTHH4BnLgM-eitKI0EG96a0pRDVy8mDe5FzqwtmfuQPvw__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA)):
+
 ```{r}
 #| code-fold: true
 #| code-summary: Plot KM curves
@@ -165,7 +158,7 @@ df_km |>
   theme(legend.position = "bottom") +
   scale_x_continuous(limits = c(0, 18), breaks = seq(0, 18, by = 2), expand = expansion(c(0,0))) +
   scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2), expand = expansion(c(0,0))) +
-  scale_color_jama() +
+  scale_color_jama() + # use the JAMA color palette
   scale_linetype_manual(NULL, values = 1:2) +
   labs(
     title = "Camrelizumab trial",
@@ -184,7 +177,200 @@ df_km |>
 
 ### Input the risk tables
 
+The at-risk tables for OS and PFS in [Figure 2](https://cdn.jamanetwork.com/ama/content_public/journal/jama/938771/joi210086f2_1631212840.67618.png?Expires=1742906986&Signature=WCvbxcuOTh8hPw~iEh2XWTNts3Pz7nUT7PohXwdZZYqGDMfjAiYi5E~UCPFkZNQVJH7X01c4SzFLqV-q6EBpTdfxKDBJ49kk-oXN9JcsQZ1gvGgPRwhm0j-a6SVDPNCsifiOPEY3dyc0Qcj0d2pXChb51nNA1luMmDM9ngPAdBPy5cLVm9~Ao0TC9mzWD2cRrTbpD82YCwVQ8ukSieJWMsv9zoNjKjw0hnXgSNuAu6J6dWMH61P9LRPDTvpI6fgBYoD4h6Xo7aERiRMgh8ExIGZQgwBmNCJBcupPRu-10NTHH4BnLgM-eitKI0EG96a0pRDVy8mDe5FzqwtmfuQPvw__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA) are manually entered in a csv file:
+
+-   [risk_table.csv](https://lmaowisc.github.io/winkm/risk_table.csv)
+
+Read and the risk table and compute the total follow-up times:
+
+```{r}
+# Read risk table, in the format:
+# time_col, endpoint_col, group_cols (2)
+# Actual data look like this:
+# time	endpoint	camr_chemo	placebo_chemo
+# 0	os	298	298
+# 2	os	294	289
+# 4	os	285	275
+risk_table <- readr::read_csv(
+  "data/Camrelizumab Luo 2021 - JAMA/risk_table.csv"
+)
+# Compute follow-up times
+fl_times <- compute_followup(risk_table,
+                  time_col     = "time",
+                  endpoint_col = "endpoint",
+                  group_cols   = c("placebo_chemo", "camr_chemo"),
+                  group_labels = c("Placebo", "Camrelizumab")
+                 )
+# # A tibble: 4 × 3
+#   endpoint group        total_followup
+#   <chr>    <fct>                 <dbl>
+# 1 os       Placebo                2690
+# 2 os       Camrelizumab           2747
+# 3 pfs      Placebo                1528
+# 4 pfs      Camrelizumab           1919
+
+```
+
+### Input the total event counts
+
+The total numbers of OS and PFS events are reported in the text of the paper; the total numbers of progressive disease are reported in the CONSORT diagram ([Figure 1](https://cdn.jamanetwork.com/ama/content_public/journal/jama/938771/joi210086f1_1631212840.6058.png?Expires=1742906986&Signature=UUOOmRpobHUrdvv5hm~Bt01KmllQ4wOLtlwaUAVfaYFV3HBn~8iNcifTRQCWd6ZE8Xk1WUsAX7D15njzNdKVnO~uB0cqd3e6B8IBsJpIMcQQ~HEsjDf1t1kPc6vL1sdYJH9bjAlp0BkduF3K10qJ~zU1VR44eFJ2w3lsJQIQZqW7OUAcAxfhJjrKywEgLDFJp6759oFuwkGmqIE-QqXaFqNEXA8D6UxZS0qF-GByBATfAFIpfO25TbbJ9VQBpaP7CIMqel~r2rT4-uLIE1muNSIFTxPiPcSHzlEnFDu2OMH5cHwxgTOw4zIh5KxvE--qMCFuOZI6NzbQP0BL6zA1gQ__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA)).
+
+```{r}
+
+# Manually input event numbers
+# trt: Camrelizumab
+event_nums_camr <- c(
+  ND = 135, # Deaths
+  NP = 144, # Progression (141 radiographic + 3 clinical progression)
+  Ns = 199  # PFS endpoints
+)
+# ctr: Placebo
+event_nums_plac <- c(
+  ND = 174, # Deaths
+  NP = 193, # Progression (189 radiographic + 4 clinical progression)
+  Ns = 229  # PFS endpoints
+)
+
+```
+
+Compute the association parameter $\theta$ using follow-up lengths and event counts:
+
+```{r}
+# Compute theta
+theta <- compute_theta(
+  event_nums_trt = event_nums_camr,
+  event_nums_ctr = event_nums_plac,
+  fl_times = fl_times,
+  ref = "Placebo" # labelled reference group
+)
+# 1 - 1/theta is Kendall's tau
+# theta_trt theta_ctr 
+# 0.4193222 0.5458616
+```
+
+### Calculate win-loss probabilities
+
+Finally, we can calculate the win-loss statistics at functions of time:
+
+```{r}
+# Win-loss probabilities calculated from all summary data
+df_wl <- compute_win_loss(
+  df_inc         = df_increments,     # From KM estimates
+  event_nums_trt = event_nums_camr,   # Total event counts
+  event_nums_ctr = event_nums_plac,
+  theta = theta,                       # Association parameter
+  ref = "Placebo"                      # Reference group
+)
+# # A tibble: 199 × 7
+#     time   win_os loss_os   win_pd  loss_pd      win    loss
+#    <dbl>    <dbl>   <dbl>    <dbl>    <dbl>    <dbl>   <dbl>
+#  1 0     0        0       0        0        0        0      
+#  2 0.112 0        0.00494 0        0        0        0.00494
+#  3 0.179 0        0.00572 0        0.000779 0        0.00650
+#  4 0.204 0.000364 0.00601 0        0.00106  0.000364 0.00707
+#  5 0.536 0.00522  0.00986 0        0.00272  0.00522  0.0126 
+```
+
+Here:
+
+-   `time`: time points;
+-   `win_os`, `loss_os`: win and loss probabilities for OS;
+-   `win_pd`, `loss_pd`: win and loss probabilities for PFS (when OS is tied);
+-   `win`, `loss`: overall win and loss probabilities.
+
+### Display the results
+
+First, plot the approximated win-loss probabilities over time:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Plot win-loss probabilities"
+#| eval: true
+#| fig-width: 6
+#| fig-height: 4
+#| fig-caption: "Win-loss probabilities based on the ESCORT-1st trial [@luo2021]"
+
+df_wl |>
+  ggplot(aes(x = time)) +
+  geom_area(aes(y = win, fill = "Camrelizumab"), alpha = 0.7) +
+  geom_area(aes(y = win_os, fill = "Camrelizumab"))  +
+  geom_area(aes(y = - loss, fill = "Placebo"), alpha = 0.7) +
+  geom_area(aes(y = - loss_os, fill = "Placebo")) +
+  geom_line(data = df_wl,
+            aes(y = win, color = "Camrelizumab"), linewidth = 1, 
+            show.legend = FALSE) +
+  geom_line(data = df_wl,
+            aes(y = - loss, color = "Placebo"), linewidth = 1,
+            show.legend = FALSE) +
+  scale_y_continuous("Win/Loss probability", limits = c(-0.42, 0.62),
+                     breaks = seq(-0.4, 0.6, by = 0.2),
+                     labels = abs(seq(-0.4, 0.6, by = 0.2))) +
+  scale_x_continuous("Time (months)", limits = c(0, 18), expand = expansion(c(0,0)),
+                     breaks = seq(0, 18, by = 2)) +
+  scale_fill_jama(limits = c("Placebo", "Camrelizumab")) +
+  theme_classic() +
+  theme(
+    legend.position = c(0, 1),
+    legend.justification = c(0, 1.35),
+    # legend.direction = "horizontal",
+    legend.title = element_blank(),
+    legend.background = element_rect(fill = "transparent"),
+    panel.grid.major.y = element_line()
+  )
+
+```
+
+-   Darker color represents win/loss on OS; light color represents win/loss on PFS.
+
+Next, we can summarize the win-loss statistics at selected time points:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Calculate win-loss statistics at selected time points"
+# Function to calculate win odds
+win_odds <- function(win, loss) {
+  tie <- 1 - win - loss
+    (win + 0.5 * tie) / (loss + 0.5 * tie)
+}
+
+# Specify time points
+t0 <- c(6, 12, 18) # Selected months
+# Compute win ratio at t0
+stats <- tibble(
+  t0,                              # Time points
+  wl = map(t0, ~ df_wl |>          # Get the win-loss stats at latest time point to t0
+    filter(time <= .x) |>
+    slice_tail(n = 1) |> 
+      select(win_os, loss_os, win, loss)
+  ) 
+) |> 
+  unnest(wl) |> 
+  mutate(                          # Compute win ratio, win odds, and net benefit
+   win_ratio_os = win_os / loss_os,
+   win_ratio = win / loss,
+   win_odds_os = win_odds(win_os, loss_os),
+   win_odds = win_odds(win, loss),
+   net_benefit_os = win_os - loss_os,
+   net_benefit = win - loss
+  ) |> 
+  select(
+    t0, 
+    win_ratio_os, win_odds_os, net_benefit_os,
+    win_ratio, win_odds, net_benefit
+  )
+
+# For table display
+library(knitr)
+# Print the table
+stats |> 
+  kable(format = "html", digits = 2, caption = "Win-loss statistics at selected time points",
+        col.names = c("Time (months)", "Win ratio (OS)", "Win odds (OS)", "Net benefit (OS)",
+                      "Win ratio", "Win odds", "Net benefit")
+        )
 
 
+```
+
+Interestingly, the inverse of 18-month win ratio for OS is 1/1.39=0.72, which is close to the hazard ratio of 0.70 reported in the paper. This is expected when the PH assumption is true [@oakes2016].
 
 ## References
