@@ -11,7 +11,7 @@ website:
         text: Home
       - href: workflow.qmd
         text: Workflow
-      - href: case.qmd
+      - href: cases/index.qmd
         text: Case Studies
       - href: papers.qmd
         text: Papers

@@ -25,7 +25,7 @@
     "href": "index.html#basic-idea",
     "title": "Calculating win-loss statistics using summary data",
     "section": "Basic idea",
-    "text": "Basic idea\nThe basic idea is to consider the win and loss proportions by a certain time as a functional of the joint distribution of OS and EFS. Since we only have the marginal distributions through the KM curves, we will need to infer their associations via additional summary data like total event counts and rates.\nAll in all, we need the following for each arm:\n\nKM estimates for OS and EFS (obtained by scanning and digitizing the curves using free online tools like WebPlotDigitizer;\nAt-risk table at selected time points (usually provided below the KM curves);\nTotal event counts (reported in the CONSORT diagram or results section):\n\nDeaths (OS);\nEFS endpoints (first of death/nonfatal event);\nNonfatal event."
+    "text": "Basic idea\nThe basic idea is to consider the win and loss proportions by a certain time as a functional of the joint distribution of OS and EFS. Since we only have the marginal distributions through the KM curves, we will need to infer their associations via additional summary data like total event counts and rates.\nAll in all, we need the following for each arm:\n\nKM estimates for OS and EFS (obtained by scanning and digitizing the curves using free online tools like WebPlotDigitizer; this typically involves putting dots, manually or automatically, on the curves and extracting their coordinates);\nAt-risk table at selected time points (usually provided below the KM curves);\nTotal event counts (reported in the CONSORT diagram or results section):\n\nDeaths (OS);\nEFS endpoints (first of death/nonfatal event);\nNonfatal event."
   },
   {
     "objectID": "index.html#example",
@@ -75,5 +75,26 @@
     "title": "Main steps in extracting win-loss measures",
     "section": "All-in-one approach: run_win_loss_workflow()",
     "text": "All-in-one approach: run_win_loss_workflow()\nPurpose: Perform all the above steps in a single function call.\nMain Inputs: (selected)\n\nos_file, pfs_file: (Optional) CSV files for OS/PFS digitized data.\nos_data, pfs_data: (Optional) Alternatively, already-loaded data frames for OS/PFS.\nevent_nums_trt, event_nums_ctr: Named numeric vectors of death/progression/PFS counts.\nref_group, ref_group_labelled: Reference group name before/after labeling.\ncompute_theta: If TRUE, also reads risk-table data and computes \\(\\theta\\).\nrisk_table_file, risk_table_data: (Optional) CSV or data frame with at-risk numbers.\ngroup_cols_at_risk, group_labels_at_risk: Columns and labels for pivoting the risk table.\n\nOutput: A list containing:\n\nos_long, pfs_long: Pivoted OS/PFS data.\ndf_merged: Merged OS/PFS tibble.\ndf_increments: The increments tibble.\ntheta: Computed \\(\\theta\\) parameters (if requested).\ndf_wl: Final win/loss tibble from compute_win_loss().\n\nExample Usage:\n\n# Example usage:\nresults &lt;- run_win_loss_workflow(\n  # Optionally specify input files or data frames\n  os_file        = \"camrelizumab_os.csv\",\n  pfs_file       = \"camrelizumab_pfs.csv\",\n\n  # Event counts\n  event_nums_trt = c(ND=135, NP=144, Ns=199),\n  event_nums_ctr = c(ND=174, NP=193, Ns=229),\n\n  # Reference group labeling\n  ref_group        = \"placebo\",\n  ref_group_labelled = \"Placebo\",\n\n  # Merge OS/PFS & compute increments\n  merge_os_pfs   = TRUE,\n\n  # Compute theta using risk table\n  compute_theta  = TRUE,\n  risk_table_file   = \"risk_table.csv\",\n  group_cols_at_risk   = c(\"placebo_chemo\", \"camr_chemo\"),\n  group_labels_at_risk = c(\"Placebo\", \"Camrelizumab\")\n)\n\n# 'results' is a list:\n# - results$os_long\n# - results$pfs_long\n# - results$df_merged\n# - results$df_increments\n# - results$theta\n# - results$df_wl"
+  },
+  {
+    "objectID": "cases/index.html",
+    "href": "cases/index.html",
+    "title": "Case studies",
+    "section": "",
+    "text": "A landmark colon cancer trial\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHF-ACTION: A cardiovascular trial\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "cases/colon.html#references",
+    "href": "cases/colon.html#references",
+    "title": "A landmark colon cancer trial",
+    "section": "References",
+    "text": "References"
+  },
+  {
+    "objectID": "cases/hf_action.html#references",
+    "href": "cases/hf_action.html#references",
+    "title": "HF-ACTION: a cardiovascular trial",
+    "section": "References",
+    "text": "References"
   }
 ]

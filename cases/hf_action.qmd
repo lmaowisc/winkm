@@ -1,0 +1,13 @@
+---
+title: "HF-ACTION: A cardiovascular trial"
+subtitle: "Exercise training versus usual care alone on mortality > hospitalization in heart failure patients"
+execute:
+  warning: false
+bibliography: references.bib
+---
+
+
+## Introduction
+
+
+## References

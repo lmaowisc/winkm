@@ -1,0 +1,15 @@
+---
+title: "A landmark colon cancer trial"
+subtitle: "Levamisole + fluorouracil vs. control on mortality > relapse of cancer"
+execute:
+  warning: false
+bibliography: references.bib
+---
+
+
+## Introduction
+
+
+
+
+## References
