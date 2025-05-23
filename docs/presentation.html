@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.6.39">
 
   <meta name="author" content="Lu Mao">
-  <title>WinKM – WinKM: Regularized win ratio regression</title>
+  <title>WinKM – WinKM: Approximating win-loss probabilities</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -32,6 +32,7 @@
     div.csl-bib-body { }
     div.csl-entry {
       clear: both;
+      margin-bottom: 0em;
     }
     .hanging-indent div.csl-entry {
       margin-left:2em;
@@ -151,9 +152,9 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" data-background-image="figs/OSU-PublicHealth-Horiz-RGBHEX.png" data-background-position="5% 5%" data-background-size="38%" class="quarto-title-block center">
-  <h1 class="title"><code>WinKM</code>: Regularized win ratio regression</h1>
-  <p class="subtitle">Variable selection and risk prediction with hierarchical composite outcomes</p>
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title"><code>WinKM</code>: Approximating win-loss probabilities</h1>
+  <p class="subtitle">Based on overall and event-free survival functions</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -202,23 +203,97 @@ Lu Mao
 <li><strong>Introduction</strong></li>
 <li><strong>Methods</strong>
 <ul>
-<li>Standard win ratio regression</li>
-<li>Regularization and computation</li>
-<li><a href="https://lmaowisc.github.io/wrnet/"><code>WRNet</code></a> workflow</li>
+<li>Win-loss estimands</li>
+<li>Approximating formula</li>
+<li><a href="https://lmaowisc.github.io/winKM/"><code>WinKM</code></a> workflow</li>
 </ul></li>
-<li><strong>Simulation studies</strong></li>
-<li><strong>HF-ACTION application</strong></li>
+<li><strong>Case studies</strong>
+<ul>
+<li>A colon cancer trial</li>
+<li>HF-ACTION trial</li>
+</ul></li>
+<li><strong>Conclusion</strong></li>
 </ul>
 </section>
-<section>
-<section id="introduction" class="title-slide slide level1 center">
-<h1>Introduction</h1>
+<section id="introduction" class="slide level2">
+<h2>Introduction</h2>
+<ul>
+<li><strong>Win-loss statistics</strong>
+<ul>
+<li><strong>Generalized pairwise comparisons</strong> (GPC) <span class="citation" data-cites="buyse:2025">(<a href="#/references" role="doc-biblioref" onclick="">Buyse et al., 2025</a>)</span></li>
+<li><strong>Prioritization</strong>: death &gt; nonfatal event (hospitalization/disease progression)</li>
+<li><strong>Proportions of wins vs losses</strong>
+<ul>
+<li>Win ratio <span class="citation" data-cites="pocock:2012">(<a href="#/references" role="doc-biblioref" onclick="">Pocock et al., 2012</a>)</span>, win odds <span class="citation" data-cites="brunner:2021">(<a href="#/references" role="doc-biblioref" onclick="">Brunner et al., 2021</a>)</span>, net benefit <span class="citation" data-cites="buyse:2010">(<a href="#/references" role="doc-biblioref" onclick="">Buyse, 2010</a>)</span></li>
+</ul></li>
+</ul></li>
+<li><strong>Meta analysis?</strong>
+<ul>
+<li>Literature-wide evidence synthesis</li>
+<li>Earlier studies not reporting win-loss measures</li>
+<li>Patient-level data unavailable</li>
+</ul></li>
+</ul>
 <!-- ![](figs/pres_hf_reg.png){fig-align="center" width="55%"} -->
+</section>
+<section>
+<section id="methods" class="title-slide slide level1 center">
+<h1>Methods</h1>
+
+</section>
+<section id="notation" class="slide level2">
+<h2>Notation</h2>
+<ul>
+<li><strong>Outcome data</strong>
+<ul>
+<li><span class="math inline">\(D_a\)</span>: Overall survival (OS) time</li>
+<li><span class="math inline">\(T_a\)</span>: Nonfatal event time</li>
+<li><span class="math inline">\(T_a^* = D_a\wedge T_a\)</span>: Event-free survival (EFS) time</li>
+<li><span class="math inline">\(a = 1\)</span>: treatment; 0: control</li>
+</ul></li>
+<li><strong>Summary functions</strong>
+<ul>
+<li><strong>Joint survival</strong> (likely unavailable): <span class="math inline">\(H_a(t, s)=\pr(T_a&gt;t, D_a&gt; s)\)</span><br>
+</li>
+<li><strong>OS</strong>: <span class="math inline">\(S_a(t) =\pr(D_a &gt; t)\)</span></li>
+<li><strong>EFS</strong>: <span class="math inline">\(S_a^*(t) =\pr(T_a^* &gt; t)\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="win-loss-estimands" class="slide level2">
+<h2>Win-Loss Estimands</h2>
+<ul>
+<li><strong>Win-loss probabilities</strong> <span class="math display">\[\begin{align}\label{eq:win_def}
+w_{a, 1-a}(\tau) &amp;= \pr(\mbox{Group $a$ wins by time $\tau$})\notag\\
+&amp;=\pr\underbrace{(D_{1-a}&lt;D_a\wedge \tau)}_{\mbox{Win on OS}} +
+\pr\underbrace{(D_1\wedge D_0 &gt;\tau, T_{1-a}&lt;T_a\wedge \tau)}_{\mbox{Tie on OS,
+win on nonfatal}}\notag\\
+&amp;= \int_0^\tau S_a(t-)\d F_{1-a}(t)
++S_1(\tau)S_2(\tau) \notag\\
+&amp;\hspace{1em}\times \int_0^\tau \pr(T_a &gt;t\mid D_a&gt;\tau) \pr(t\leq T_{1-a} &lt;t +\d t\mid D_{1-a}&gt;\tau),
+\end{align}\]</span></li>
+</ul>
+</section></section>
+<section>
+<section id="case-studies" class="title-slide slide level1 center">
+<h1>Case studies</h1>
+
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
-<div id="refs" role="list">
-
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-brunner:2021" class="csl-entry" role="listitem">
+Brunner, E., Vandemeulebroecke, M., &amp; Mütze, T. (2021). Win odds: An adaptation of the win ratio to include ties. <em>Statistics in Medicine</em>, <em>40</em>(14), 3367–3384.
+</div>
+<div id="ref-buyse:2010" class="csl-entry" role="listitem">
+Buyse, M. (2010). Generalized pairwise comparisons of prioritized outcomes in the two-sample problem. <em>Statistics in Medicine</em>, <em>29</em>(30), 3245–3257.
+</div>
+<div id="ref-buyse:2025" class="csl-entry" role="listitem">
+Buyse, M., Verbeeck, J., Saad, E. D., Backer, M. D., Deltuvaite-Thomas, V., &amp; Molenberghs, G. (2025). <em>Handbook of Generalized Pairwise Comparisons</em>. Chapman; Hall/CRC. <a href="https://doi.org/10.1201/9781003390855">https://doi.org/10.1201/9781003390855</a>
+</div>
+<div id="ref-pocock:2012" class="csl-entry" role="listitem">
+Pocock, S. J., Ariti, C. A., Collier, T. J., &amp; Wang, D. (2012). The win ratio: a new approach to the analysis of composite endpoints in clinical trials based on clinical priorities. <em>European Heart Journal</em>, <em>33</em>(2), 176–182. <a href="https://doi.org/10.1093/eurheartj/ehr352">https://doi.org/10.1093/eurheartj/ehr352</a>
+</div>
 </div>
 
 

@@ -1,6 +1,6 @@
 ---
-title: "`WinKM`: Regularized win ratio regression"
-subtitle: "Variable selection and risk prediction with hierarchical composite outcomes"
+title: "`WinKM`: Approximating win-loss probabilities"
+subtitle: "Based on overall and event-free survival functions"
 css: wr_style.css
 csl: apa.csl
 author:
@@ -22,10 +22,10 @@ include-in-header:
       }
       </style>
 bibliography: references.bib
-title-slide-attributes: 
-  data-background-image: figs/OSU-PublicHealth-Horiz-RGBHEX.png
-  data-background-size: 38%
-  data-background-position: 5% 5%
+# title-slide-attributes: 
+#   data-background-image: figs/OSU-PublicHealth-Horiz-RGBHEX.png
+#   data-background-size: 38%
+#   data-background-position: 5% 5%
 execute:
   eval: false
   echo: true
@@ -56,15 +56,64 @@ $$
 
 -   **Introduction**
 -   **Methods**
-    -   Standard win ratio regression
-    -   Regularization and computation
-    -   [`WRNet`](https://lmaowisc.github.io/wrnet/) workflow
--   **Simulation studies**
--   **HF-ACTION application**
+    -   Win-loss estimands
+    -   Approximating formula
+    -   [`WinKM`](https://lmaowisc.github.io/winKM/) workflow
+-   **Case studies**
+    -   A colon cancer trial
+    -   HF-ACTION trial
+-   **Conclusion**
 
-# Introduction
+
+
+## Introduction
+
+-   **Win-loss statistics**
+    -   **Generalized pairwise comparisons** (GPC) [@buyse:2025]
+    -   **Prioritization**: death \> nonfatal event (hospitalization/disease progression)
+    -   **Proportions of wins vs losses**
+        -   Win ratio [@pocock:2012], win odds [@brunner:2021], net benefit [@buyse:2010]
+-   **Meta analysis?**
+    -   Literature-wide evidence synthesis
+    -   Earlier studies not reporting win-loss measures
+    -   Patient-level data unavailable
 
 <!-- ![](figs/pres_hf_reg.png){fig-align="center" width="55%"} -->
+
+# Methods
+
+## Notation
+
+-   **Outcome data**
+    -   $D_a$: Overall survival (OS) time
+    -   $T_a$: Nonfatal event time
+    -   $T_a^* = D_a\wedge T_a$: Event-free survival (EFS) time
+    -   $a = 1$: treatment; 0: control
+
+-   **Summary functions**
+    -   **Joint survival** (likely unavailable): $H_a(t, s)=\pr(T_a>t, D_a> s)$  
+    -   **OS**: $S_a(t) =\pr(D_a > t)$
+    -   **EFS**: $S_a^*(t) =\pr(T_a^* > t)$
+
+
+## Win-Loss Estimands
+
+-  **Win-loss probabilities**
+\begin{align}\label{eq:win_def}
+    w_{a, 1-a}(\tau) &= \pr(\mbox{Group $a$ wins by time $\tau$})\notag\\
+    &=\pr\underbrace{(D_{1-a}<D_a\wedge \tau)}_{\mbox{Win on OS}} + 
+    \pr\underbrace{(D_1\wedge D_0 >\tau, T_{1-a}<T_a\wedge \tau)}_{\mbox{Tie on OS,
+    win on nonfatal}}\notag\\
+    &= \int_0^\tau S_a(t-)\d F_{1-a}(t)
+    +S_1(\tau)S_2(\tau) \notag\\
+    &\hspace{1em}\times \int_0^\tau \pr(T_a >t\mid D_a>\tau) \pr(t\leq T_{1-a} <t +\d t\mid D_{1-a}>\tau),
+\end{align}
+
+
+# Case studies
+
+
+
 
 ## References
 

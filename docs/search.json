@@ -100,15 +100,57 @@
   {
     "objectID": "presentation.html#outline",
     "href": "presentation.html#outline",
-    "title": "WinKM: Regularized win ratio regression",
+    "title": "WinKM: Approximating win-loss probabilities",
     "section": "Outline",
-    "text": "Outline\n\nIntroduction\nMethods\n\nStandard win ratio regression\nRegularization and computation\nWRNet workflow\n\nSimulation studies\nHF-ACTION application"
+    "text": "Outline\n\nIntroduction\nMethods\n\nWin-loss estimands\nApproximating formula\nWinKM workflow\n\nCase studies\n\nA colon cancer trial\nHF-ACTION trial\n\nConclusion"
   },
   {
     "objectID": "presentation.html#references",
     "href": "presentation.html#references",
-    "title": "WinKM: Regularized win ratio regression",
+    "title": "WinKM: Approximating win-loss probabilities",
     "section": "References",
-    "text": "References"
+    "text": "References\n\n\nBrunner, E., Vandemeulebroecke, M., & Mütze, T. (2021). Win odds: An adaptation of the win ratio to include ties. Statistics in Medicine, 40(14), 3367–3384.\n\n\nBuyse, M. (2010). Generalized pairwise comparisons of prioritized outcomes in the two-sample problem. Statistics in Medicine, 29(30), 3245–3257.\n\n\nBuyse, M., Verbeeck, J., Saad, E. D., Backer, M. D., Deltuvaite-Thomas, V., & Molenberghs, G. (2025). Handbook of Generalized Pairwise Comparisons. Chapman; Hall/CRC. https://doi.org/10.1201/9781003390855\n\n\nPocock, S. J., Ariti, C. A., Collier, T. J., & Wang, D. (2012). The win ratio: a new approach to the analysis of composite endpoints in clinical trials based on clinical priorities. European Heart Journal, 33(2), 176–182. https://doi.org/10.1093/eurheartj/ehr352"
+  },
+  {
+    "objectID": "presentation.html#win-loss-methods",
+    "href": "presentation.html#win-loss-methods",
+    "title": "WinKM: Approximating win-loss probabilities",
+    "section": "Win-Loss Methods",
+    "text": "Win-Loss Methods\n\nWin-loss statistics\n\nGeneralized pairwise comparisons (GPC) (Buyse et al., 2025)\nPrioritization: death &gt; nonfatal event (hospitalization/disease progression)\nProportions of wins vs losses\n\nWin ratio (Pocock et al., 2012), win odds (Brunner et al., 2021), net benefit (Buyse, 2010)\n\n\nMeta analysis?\n\nLiterature-wide evidence synthesis\nEarlier studies not reporting win-loss measures\nPatient-level data unavailable"
+  },
+  {
+    "objectID": "presentation.html#hierarchical-composite-endpoints",
+    "href": "presentation.html#hierarchical-composite-endpoints",
+    "title": "WinKM: Approximating win-loss probabilities",
+    "section": "Hierarchical Composite Endpoints",
+    "text": "Hierarchical Composite Endpoints\n\nWin-loss statistics\n\nWin ratio, win odds, net benefit\nPatient-level generalized pairwise comparisons (GPC)\nHierarchical composite endpoints: death &gt; nonfatal event (hospitalization/disease progression)"
+  },
+  {
+    "objectID": "presentation.html#hierarchcial-composite-endpoints",
+    "href": "presentation.html#hierarchcial-composite-endpoints",
+    "title": "WinKM: Approximating win-loss probabilities",
+    "section": "Hierarchcial Composite Endpoints",
+    "text": "Hierarchcial Composite Endpoints\n\nWin-loss statistics\n\nGeneralized pairwise comparisons (GPC) (Buyse et al., 2025)\nPrioritization: death &gt; nonfatal event (hospitalization/disease progression)\nProportions of wins vs losses\n\nWin ratio (Pocock et al., 2012), win odds (Brunner et al., 2021), net benefit (Buyse, 2010)\n\n\nMeta analysis?\n\nLiterature-wide evidence synthesis\nEarlier studies not reporting win-loss measures\nPatient-level data unavailable"
+  },
+  {
+    "objectID": "presentation.html#win-loss-estimands",
+    "href": "presentation.html#win-loss-estimands",
+    "title": "WinKM: Approximating win-loss probabilities",
+    "section": "Win-Loss Estimands",
+    "text": "Win-Loss Estimands\n\nWin-loss probabilities \\[\\begin{align}\\label{eq:win_def}\nw_{a, 1-a}(\\tau) &= \\pr(\\mbox{Group $a$ wins by time $\\tau$})\\notag\\\\\n&=\\pr\\underbrace{(D_{1-a}&lt;D_a\\wedge \\tau)}_{\\mbox{Win on OS}} +\n\\pr\\underbrace{(D_1\\wedge D_0 &gt;\\tau, T_{1-a}&lt;T_a\\wedge \\tau)}_{\\mbox{Tie on OS,\nwin on nonfatal}}\\notag\\\\\n&= \\int_0^\\tau S_a(t-)\\d F_{1-a}(t)\n+S_1(\\tau)S_2(\\tau) \\notag\\\\\n&\\hspace{1em}\\times \\int_0^\\tau \\pr(T_a &gt;t\\mid D_a&gt;\\tau) \\pr(t\\leq T_{1-a} &lt;t +\\d t\\mid D_{1-a}&gt;\\tau),\n\\end{align}\\]"
+  },
+  {
+    "objectID": "presentation.html#notation",
+    "href": "presentation.html#notation",
+    "title": "WinKM: Approximating win-loss probabilities",
+    "section": "Notation",
+    "text": "Notation\n\nOutcome data\n\n\\(D_a\\): Overall survival (OS) time\n\\(T_a\\): Nonfatal event time\n\\(T_a^* = D_a\\wedge T_a\\): Event-free survival (EFS) time\n\\(a = 1\\): treatment; 0: control\n\nSummary functions\n\nJoint survival (likely unavailable): \\(H_a(t, s)=\\pr(T_a&gt;t, D_a&gt; s)\\)\n\nOS: \\(S_a(t) =\\pr(D_a &gt; t)\\)\nEFS: \\(S_a^*(t) =\\pr(T_a^* &gt; t)\\)"
+  },
+  {
+    "objectID": "presentation.html#introduction",
+    "href": "presentation.html#introduction",
+    "title": "WinKM: Approximating win-loss probabilities",
+    "section": "Introduction",
+    "text": "Introduction\n\nWin-loss statistics\n\nGeneralized pairwise comparisons (GPC) (Buyse et al., 2025)\nPrioritization: death &gt; nonfatal event (hospitalization/disease progression)\nProportions of wins vs losses\n\nWin ratio (Pocock et al., 2012), win odds (Brunner et al., 2021), net benefit (Buyse, 2010)\n\n\nMeta analysis?\n\nLiterature-wide evidence synthesis\nEarlier studies not reporting win-loss measures\nPatient-level data unavailable"
   }
 ]

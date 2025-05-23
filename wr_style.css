@@ -23,7 +23,7 @@
   font-size: 80%  !important;
 }
 
-.MathJax, .MathJax_Display  {
+.MathJax_Display  {
     font-size: 70%  !important;
 }
 
@@ -33,5 +33,5 @@ code.sourceCode {
 }
 
 .big-code{
-  font-size: 120%  
+  font-size: 120%
 }
