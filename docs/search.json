@@ -96,5 +96,19 @@
     "title": "HF-ACTION: a cardiovascular trial",
     "section": "References",
     "text": "References"
+  },
+  {
+    "objectID": "presentation.html#outline",
+    "href": "presentation.html#outline",
+    "title": "WinKM: Regularized win ratio regression",
+    "section": "Outline",
+    "text": "Outline\n\nIntroduction\nMethods\n\nStandard win ratio regression\nRegularization and computation\nWRNet workflow\n\nSimulation studies\nHF-ACTION application"
+  },
+  {
+    "objectID": "presentation.html#references",
+    "href": "presentation.html#references",
+    "title": "WinKM: Regularized win ratio regression",
+    "section": "References",
+    "text": "References"
   }
 ]

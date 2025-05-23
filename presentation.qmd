@@ -1,0 +1,72 @@
+---
+title: "`WinKM`: Regularized win ratio regression"
+subtitle: "Variable selection and risk prediction with hierarchical composite outcomes"
+css: wr_style.css
+csl: apa.csl
+author:
+  name: Lu Mao
+  affiliations: 
+    - name: Department of Biostatistics & Medical Informatics
+    - University of Wisconsin-Madison
+    - Draft: May 2025
+format: 
+  revealjs:
+    theme: default
+    auto-stretch: false
+editor: visual
+include-in-header:
+  - text: |
+      <style type="text/css">
+      ul li ul li {
+        font-size: 0.80em;
+      }
+      </style>
+bibliography: references.bib
+title-slide-attributes: 
+  data-background-image: figs/OSU-PublicHealth-Horiz-RGBHEX.png
+  data-background-size: 38%
+  data-background-position: 5% 5%
+execute:
+  eval: false
+  echo: true
+---
+
+$$
+\newcommand{\wh}{\widehat}
+\newcommand{\wt}{\widetilde}
+\def\bs{\boldsymbol}
+\newcommand{\red}{}
+\newcommand{\indep}{\perp \!\!\! \perp}
+\def\T{{ \mathrm{\scriptscriptstyle T} }}
+\def\pr{{\rm pr}}
+\def\d{{\rm d}}
+\def\W{{\mathcal W}}
+\def\H{{\mathcal H}}
+\def\I{{\mathcal I}}
+\def\C{{\mathcal C}}
+\def\S{{\mathcal S}}
+\def\Sk{{\mathcal S}^{(k)}}
+\def\Skm{{\mathcal S}^{(-k)}}
+\def\v{\varepsilon}
+\def\bSig\mathbf{\Sigma}
+\def\Un{\sum_{i=1}^{n-1}\sum_{j=i+1}^n}
+$$
+
+## Outline
+
+-   **Introduction**
+-   **Methods**
+    -   Standard win ratio regression
+    -   Regularization and computation
+    -   [`WRNet`](https://lmaowisc.github.io/wrnet/) workflow
+-   **Simulation studies**
+-   **HF-ACTION application**
+
+# Introduction
+
+<!-- ![](figs/pres_hf_reg.png){fig-align="center" width="55%"} -->
+
+## References
+
+::: {#refs}
+:::
