@@ -37,7 +37,6 @@ $$
 \def\bs{\boldsymbol}
 \newcommand{\red}{}
 \newcommand{\indep}{\perp \!\!\! \perp}
-\def\T{{ \mathrm{\scriptscriptstyle T} }}
 \def\pr{{\rm pr}}
 \def\d{{\rm d}}
 \def\W{{\mathcal W}}
