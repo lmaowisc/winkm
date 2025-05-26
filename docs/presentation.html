@@ -256,9 +256,9 @@ w_{a, 1-a}(\tau) &amp;= \mathrm{pr}(\mbox{Group $a$ wins by time $\tau$})\notag\
 &amp;=\mathrm{pr}\underbrace{(D_{1-a}&lt;D_a\wedge \tau)}_{\mbox{Win on OS}} +
 \mathrm{pr}\underbrace{(D_1\wedge D_0 &gt;\tau, T_{1-a}&lt;T_a\wedge \tau)}_{\mbox{Tie on OS,
 win on nonfatal}}\notag\\
-&amp;= \int_0^\tau \color{blue}{S_a(t-){\rm d} F_{1-a}(t)}
+&amp;= \int_0^\tau \color{blue}{S_a(t-)\mathrm{d} F_{1-a}(t)}
 \quad\quad\quad\quad \big(F_a(t) = 1 - S_a(t)\big)\\
-&amp;\hspace{1em}+\color{blue}{S_1(\tau)S_0(\tau)} \int_0^\tau \color{red}{\mathrm{pr}(T_a &gt;t\mid D_a&gt;\tau) \mathrm{pr}(t\leq T_{1-a} &lt;t +{\rm d} t\mid D_{1-a}&gt;\tau)}
+&amp;\hspace{1em}+\color{blue}{S_1(\tau)S_0(\tau)} \int_0^\tau \color{red}{\mathrm{pr}(T_a &gt;t\mid D_a&gt;\tau) \mathrm{pr}(t\leq T_{1-a} &lt;t +\mathrm{d} t\mid D_{1-a}&gt;\tau)}
 \end{align}\]</span>
 <ul>
 <li><strong>Win ratio</strong>: <span class="math inline">\(w_{1,0}(\tau)/w_{0,1}(\tau)\)</span></li>
@@ -271,8 +271,8 @@ win on nonfatal}}\notag\\
 <h2>Survival-Conditional Event Rate</h2>
 <ul>
 <li><strong>Second-term unknown</strong> <span class="math display">\[\begin{align}
-&amp;\int_0^\tau \color{red}{\mathrm{pr}(T_a &gt;t\mid D_a&gt;\tau) \mathrm{pr}(t\leq T_{1-a} &lt;t +{\rm d} t\mid D_{1-a}&gt;\tau)}\\
-=&amp; -\int_0^\tau \color{red}{H_a(t\mid \tau) H_{1-a}({\rm d} t\mid \tau)}\\
+&amp;\int_0^\tau \color{red}{\mathrm{pr}(T_a &gt;t\mid D_a&gt;\tau) \mathrm{pr}(t\leq T_{1-a} &lt;t +\mathrm{d} t\mid D_{1-a}&gt;\tau)}\\
+=&amp; -\int_0^\tau \color{red}{H_a(t\mid \tau) H_{1-a}(\mathrm{d} t\mid \tau)}\\
 =&amp;\,\color{red}{\mathrm{pr}(T_{1-a}&lt;T_a\wedge \tau\mid D_1 &gt; \tau, D_0 &gt;\tau)}
 \end{align}\]</span>
 <ul>
@@ -286,9 +286,9 @@ win on nonfatal}}\notag\\
 <h2>Approxmation - Idea</h2>
 <ul>
 <li><strong>Start with</strong> <span class="math inline">\(t\)</span>-survivors <span class="math display">\[\begin{align}
-{\rm d}\Lambda_a(t\mid\tau) &amp;:= \mathrm{pr}(t\le T_a &lt; t + {\rm d} t\mid T_a\geq t, D_a&gt;\color{red}{\tau})\\
-&amp;\leq \mathrm{pr}(t\le T_a &lt; t + {\rm d} t\mid T_a\geq t, D_a\geq \color{red}{t})\\
-&amp;\approx \frac{N_a^{\rm E}}{N_a^*}{\rm d}\hat\Lambda_a^*(u)
+\mathrm{d}\Lambda_a(t\mid\tau) &amp;:= \mathrm{pr}(t\le T_a &lt; t + \mathrm{d} t\mid T_a\geq t, D_a&gt;\color{red}{\tau})\\
+&amp;\leq \mathrm{pr}(t\le T_a &lt; t + \mathrm{d} t\mid T_a\geq t, D_a\geq \color{red}{t})\\
+&amp;\approx \frac{N_a^{\rm E}}{N_a^*}\mathrm{d}\hat\Lambda_a^*(u)
 \end{align}\]</span>
 <ul>
 <li>Notation
@@ -306,8 +306,8 @@ win on nonfatal}}\notag\\
 <h2>Cross Ratio</h2>
 <ul>
 <li><strong>Local dependence</strong> <span class="citation" data-cites="oakes:1982 oakes:1986">(<a href="#/references" role="doc-biblioref" onclick="">Oakes, 1982</a>, <a href="#/references" role="doc-biblioref" onclick="">1986</a>)</span> <span class="math display">\[\begin{align*}\label{eq:cr:def}
-  \kappa_a(t, s) &amp;=\frac{\mathrm{pr}(t\leq T_a&lt; t +{\rm d} t\mid T_a\geq t,  D_a = s )}
-{\mathrm{pr}(t\leq T_a&lt; t +{\rm d} t\mid T_a\geq t, D_a \geq s)}  \notag\\
+  \kappa_a(t, s) &amp;=\frac{\mathrm{pr}(t\leq T_a&lt; t +\mathrm{d} t\mid T_a\geq t,  D_a = s )}
+{\mathrm{pr}(t\leq T_a&lt; t +\mathrm{d} t\mid T_a\geq t, D_a \geq s)}  \notag\\
 &amp; = \frac{H_a(t, s)\partial^2 H_a(t, s)/(\partial t\partial s)}
 {\{\partial H_a(t, s)/\partial t\}\{\partial H_a(t, s)/\partial s\}}
 \end{align*}\]</span>
@@ -341,8 +341,8 @@ win on nonfatal}}\notag\\
 <h2>Approxmation - Formula</h2>
 <ul>
 <li><p><strong>Formula</strong> <span class="math display">\[
-H_a(t\mid\tau) \approx \prod_{0\leq u \leq t}\left(1 - \frac{N_a^{\rm E}}{N_a^*}{\rm d}\hat\Lambda_a^*(u)\underbrace{\prod_{u\leq s \leq \tau}
-   \left[1 - \{\hat\kappa_a(u, s)-1\}\frac{{\rm d}\hat F_a(s)}{\hat S_a(s)}\right]}_{\text{Bias correction for $\tau$-survivorship}}\right)
+H_a(t\mid\tau) \approx \prod_{0\leq u \leq t}\left(1 - \frac{N_a^{\rm E}}{N_a^*}\mathrm{d}\hat\Lambda_a^*(u)\underbrace{\prod_{u\leq s \leq \tau}
+   \left[1 - \{\hat\kappa_a(u, s)-1\}\frac{\mathrm{d}\hat F_a(s)}{\hat S_a(s)}\right]}_{\text{Bias correction for $\tau$-survivorship}}\right)
 \]</span></p></li>
 <li><p><strong>Summary data needed</strong></p>
 <ul>
@@ -359,7 +359,7 @@ H_a(t\mid\tau) \approx \prod_{0\leq u \leq t}\left(1 - \frac{N_a^{\rm E}}{N_a^*}
 <ul>
 <li><code>prepare_km_data()</code>: read and clean digitized KM data</li>
 <li><code>merge_endpoints()</code>: align OS and PFS on a common time grid</li>
-<li><code>compute_increments()</code>: calculate <span class="math inline">\({\rm d}\hat S_a(t)\)</span> and <span class="math inline">\({\rm d}\hat S^*_a(t)\)</span></li>
+<li><code>compute_increments()</code>: calculate <span class="math inline">\(\mathrm{d}\hat S_a(t)\)</span> and <span class="math inline">\(\mathrm{d}\hat S^*_a(t)\)</span></li>
 <li><code>compute_followup()</code>: derive total follow-up times from at-risk tables</li>
 <li><code>compute_theta()</code>: compute association parameters (<span class="math inline">\(\theta_a\)</span>)</li>
 <li><code>compute_win_loss()</code>: calculate final win/loss probabilities</li>

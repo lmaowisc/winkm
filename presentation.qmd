@@ -88,9 +88,9 @@ $$
      &=\mathrm{pr}\underbrace{(D_{1-a}<D_a\wedge \tau)}_{\mbox{Win on OS}} + 
      \mathrm{pr}\underbrace{(D_1\wedge D_0 >\tau, T_{1-a}<T_a\wedge \tau)}_{\mbox{Tie on OS,
      win on nonfatal}}\notag\\
-     &= \int_0^\tau \color{blue}{S_a(t-){\rm d} F_{1-a}(t)} 
+     &= \int_0^\tau \color{blue}{S_a(t-)\mathrm{d} F_{1-a}(t)} 
      \quad\quad\quad\quad \big(F_a(t) = 1 - S_a(t)\big)\\
-     &\hspace{1em}+\color{blue}{S_1(\tau)S_0(\tau)} \int_0^\tau \color{red}{\mathrm{pr}(T_a >t\mid D_a>\tau) \mathrm{pr}(t\leq T_{1-a} <t +{\rm d} t\mid D_{1-a}>\tau)}
+     &\hspace{1em}+\color{blue}{S_1(\tau)S_0(\tau)} \int_0^\tau \color{red}{\mathrm{pr}(T_a >t\mid D_a>\tau) \mathrm{pr}(t\leq T_{1-a} <t +\mathrm{d} t\mid D_{1-a}>\tau)}
     \end{align}
     -   **Win ratio**: $w_{1,0}(\tau)/w_{0,1}(\tau)$
     -   **Win odds**: $w_{1,0}(\tau)/w_{0,1}(\tau)$
@@ -99,8 +99,8 @@ $$
 ## Survival-Conditional Event Rate
 
 -   **Second-term unknown** \begin{align}
-    &\int_0^\tau \color{red}{\mathrm{pr}(T_a >t\mid D_a>\tau) \mathrm{pr}(t\leq T_{1-a} <t +{\rm d} t\mid D_{1-a}>\tau)}\\
-    =& -\int_0^\tau \color{red}{H_a(t\mid \tau) H_{1-a}({\rm d} t\mid \tau)}\\
+    &\int_0^\tau \color{red}{\mathrm{pr}(T_a >t\mid D_a>\tau) \mathrm{pr}(t\leq T_{1-a} <t +\mathrm{d} t\mid D_{1-a}>\tau)}\\
+    =& -\int_0^\tau \color{red}{H_a(t\mid \tau) H_{1-a}(\mathrm{d} t\mid \tau)}\\
     =&\,\color{red}{\mathrm{pr}(T_{1-a}<T_a\wedge \tau\mid D_1 > \tau, D_0 >\tau)}
     \end{align}
     -   $H_a(t\mid \tau)=\mathrm{pr}(T_a>t\mid D_a>\tau)$: event-free probabilities in $\tau$-survivors
@@ -110,9 +110,9 @@ $$
 ## Approxmation - Idea
 
 -   **Start with** $t$-survivors \begin{align}
-    {\rm d}\Lambda_a(t\mid\tau) &:= \mathrm{pr}(t\le T_a < t + {\rm d} t\mid T_a\geq t, D_a>\color{red}{\tau})\\
-    &\leq \mathrm{pr}(t\le T_a < t + {\rm d} t\mid T_a\geq t, D_a\geq \color{red}{t})\\
-    &\approx \frac{N_a^{\rm E}}{N_a^*}{\rm d}\hat\Lambda_a^*(u)
+    \mathrm{d}\Lambda_a(t\mid\tau) &:= \mathrm{pr}(t\le T_a < t + \mathrm{d} t\mid T_a\geq t, D_a>\color{red}{\tau})\\
+    &\leq \mathrm{pr}(t\le T_a < t + \mathrm{d} t\mid T_a\geq t, D_a\geq \color{red}{t})\\
+    &\approx \frac{N_a^{\rm E}}{N_a^*}\mathrm{d}\hat\Lambda_a^*(u)
     \end{align}
     -   Notation
         -   $N_a^{\rm E}$: number of nonfatal events
@@ -124,8 +124,8 @@ $$
 ## Cross Ratio
 
 -   **Local dependence** [@oakes:1982; @oakes:1986] \begin{align*}\label{eq:cr:def}
-      \kappa_a(t, s) &=\frac{\mathrm{pr}(t\leq T_a< t +{\rm d} t\mid T_a\geq t,  D_a = s )}
-    {\mathrm{pr}(t\leq T_a< t +{\rm d} t\mid T_a\geq t, D_a \geq s)}  \notag\\
+      \kappa_a(t, s) &=\frac{\mathrm{pr}(t\leq T_a< t +\mathrm{d} t\mid T_a\geq t,  D_a = s )}
+    {\mathrm{pr}(t\leq T_a< t +\mathrm{d} t\mid T_a\geq t, D_a \geq s)}  \notag\\
     & = \frac{H_a(t, s)\partial^2 H_a(t, s)/(\partial t\partial s)}
     {\{\partial H_a(t, s)/\partial t\}\{\partial H_a(t, s)/\partial s\}}
     \end{align*}
@@ -149,8 +149,8 @@ $$
 ## Approxmation - Formula
 
 -   **Formula** $$
-    H_a(t\mid\tau) \approx \prod_{0\leq u \leq t}\left(1 - \frac{N_a^{\rm E}}{N_a^*}{\rm d}\hat\Lambda_a^*(u)\underbrace{\prod_{u\leq s \leq \tau}
-       \left[1 - \{\hat\kappa_a(u, s)-1\}\frac{{\rm d}\hat F_a(s)}{\hat S_a(s)}\right]}_{\text{Bias correction for $\tau$-survivorship}}\right)
+    H_a(t\mid\tau) \approx \prod_{0\leq u \leq t}\left(1 - \frac{N_a^{\rm E}}{N_a^*}\mathrm{d}\hat\Lambda_a^*(u)\underbrace{\prod_{u\leq s \leq \tau}
+       \left[1 - \{\hat\kappa_a(u, s)-1\}\frac{\mathrm{d}\hat F_a(s)}{\hat S_a(s)}\right]}_{\text{Bias correction for $\tau$-survivorship}}\right)
     $$
 
 -   **Summary data needed**
@@ -164,7 +164,7 @@ $$
 -   A **step-by-step** approach
     -   `prepare_km_data()`: read and clean digitized KM data
     -   `merge_endpoints()`: align OS and PFS on a common time grid
-    -   `compute_increments()`: calculate ${\rm d}\hat S_a(t)$ and ${\rm d}\hat S^*_a(t)$
+    -   `compute_increments()`: calculate $\mathrm{d}\hat S_a(t)$ and $\mathrm{d}\hat S^*_a(t)$
     -   `compute_followup()`: derive total follow-up times from at-risk tables
     -   `compute_theta()`: compute association parameters ($\theta_a$)
     -   `compute_win_loss()`: calculate final win/loss probabilities

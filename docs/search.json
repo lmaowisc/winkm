@@ -102,28 +102,28 @@
     "href": "presentation.html#win-loss-estimands",
     "title": "WinKM: Approximating win-loss probabilities",
     "section": "Win-Loss Estimands",
-    "text": "Win-Loss Estimands\n\nWin-loss probabilities (Oakes, 2016)\\[\\begin{align}\nw_{a, 1-a}(\\tau) &= \\mathrm{pr}(\\mbox{Group $a$ wins by time $\\tau$})\\notag\\\\\n&=\\mathrm{pr}\\underbrace{(D_{1-a}&lt;D_a\\wedge \\tau)}_{\\mbox{Win on OS}} +\n\\mathrm{pr}\\underbrace{(D_1\\wedge D_0 &gt;\\tau, T_{1-a}&lt;T_a\\wedge \\tau)}_{\\mbox{Tie on OS,\nwin on nonfatal}}\\notag\\\\\n&= \\int_0^\\tau \\color{blue}{S_a(t-){\\rm d} F_{1-a}(t)}\n\\quad\\quad\\quad\\quad \\big(F_a(t) = 1 - S_a(t)\\big)\\\\\n&\\hspace{1em}+\\color{blue}{S_1(\\tau)S_0(\\tau)} \\int_0^\\tau \\color{red}{\\mathrm{pr}(T_a &gt;t\\mid D_a&gt;\\tau) \\mathrm{pr}(t\\leq T_{1-a} &lt;t +{\\rm d} t\\mid D_{1-a}&gt;\\tau)}\n\\end{align}\\]\n\nWin ratio: \\(w_{1,0}(\\tau)/w_{0,1}(\\tau)\\)\nWin odds: \\(w_{1,0}(\\tau)/w_{0,1}(\\tau)\\)\nNet benefit: \\(w_{1,0}(\\tau) - w_{0,1}(\\tau)\\)"
+    "text": "Win-Loss Estimands\n\nWin-loss probabilities (Oakes, 2016)\\[\\begin{align}\nw_{a, 1-a}(\\tau) &= \\mathrm{pr}(\\mbox{Group $a$ wins by time $\\tau$})\\notag\\\\\n&=\\mathrm{pr}\\underbrace{(D_{1-a}&lt;D_a\\wedge \\tau)}_{\\mbox{Win on OS}} +\n\\mathrm{pr}\\underbrace{(D_1\\wedge D_0 &gt;\\tau, T_{1-a}&lt;T_a\\wedge \\tau)}_{\\mbox{Tie on OS,\nwin on nonfatal}}\\notag\\\\\n&= \\int_0^\\tau \\color{blue}{S_a(t-)\\mathrm{d} F_{1-a}(t)}\n\\quad\\quad\\quad\\quad \\big(F_a(t) = 1 - S_a(t)\\big)\\\\\n&\\hspace{1em}+\\color{blue}{S_1(\\tau)S_0(\\tau)} \\int_0^\\tau \\color{red}{\\mathrm{pr}(T_a &gt;t\\mid D_a&gt;\\tau) \\mathrm{pr}(t\\leq T_{1-a} &lt;t +\\mathrm{d} t\\mid D_{1-a}&gt;\\tau)}\n\\end{align}\\]\n\nWin ratio: \\(w_{1,0}(\\tau)/w_{0,1}(\\tau)\\)\nWin odds: \\(w_{1,0}(\\tau)/w_{0,1}(\\tau)\\)\nNet benefit: \\(w_{1,0}(\\tau) - w_{0,1}(\\tau)\\)"
   },
   {
     "objectID": "presentation.html#survival-conditional-event-rate",
     "href": "presentation.html#survival-conditional-event-rate",
     "title": "WinKM: Approximating win-loss probabilities",
     "section": "Survival-Conditional Event Rate",
-    "text": "Survival-Conditional Event Rate\n\nSecond-term unknown \\[\\begin{align}\n&\\int_0^\\tau \\color{red}{\\mathrm{pr}(T_a &gt;t\\mid D_a&gt;\\tau) \\mathrm{pr}(t\\leq T_{1-a} &lt;t +{\\rm d} t\\mid D_{1-a}&gt;\\tau)}\\\\\n=& -\\int_0^\\tau \\color{red}{H_a(t\\mid \\tau) H_{1-a}({\\rm d} t\\mid \\tau)}\\\\\n=&\\,\\color{red}{\\mathrm{pr}(T_{1-a}&lt;T_a\\wedge \\tau\\mid D_1 &gt; \\tau, D_0 &gt;\\tau)}\n\\end{align}\\]\n\n\\(H_a(t\\mid \\tau)=\\mathrm{pr}(T_a&gt;t\\mid D_a&gt;\\tau)\\): event-free probabilities in \\(\\tau\\)-survivors\nAssociation between death and nonfatal event\nApproximate it using \\(S_a(t), S^*_a(t)\\), and component-specific event counts"
+    "text": "Survival-Conditional Event Rate\n\nSecond-term unknown \\[\\begin{align}\n&\\int_0^\\tau \\color{red}{\\mathrm{pr}(T_a &gt;t\\mid D_a&gt;\\tau) \\mathrm{pr}(t\\leq T_{1-a} &lt;t +\\mathrm{d} t\\mid D_{1-a}&gt;\\tau)}\\\\\n=& -\\int_0^\\tau \\color{red}{H_a(t\\mid \\tau) H_{1-a}(\\mathrm{d} t\\mid \\tau)}\\\\\n=&\\,\\color{red}{\\mathrm{pr}(T_{1-a}&lt;T_a\\wedge \\tau\\mid D_1 &gt; \\tau, D_0 &gt;\\tau)}\n\\end{align}\\]\n\n\\(H_a(t\\mid \\tau)=\\mathrm{pr}(T_a&gt;t\\mid D_a&gt;\\tau)\\): event-free probabilities in \\(\\tau\\)-survivors\nAssociation between death and nonfatal event\nApproximate it using \\(S_a(t), S^*_a(t)\\), and component-specific event counts"
   },
   {
     "objectID": "presentation.html#approxmation---idea",
     "href": "presentation.html#approxmation---idea",
     "title": "WinKM: Approximating win-loss probabilities",
     "section": "Approxmation - Idea",
-    "text": "Approxmation - Idea\n\nStart with \\(t\\)-survivors \\[\\begin{align}\n{\\rm d}\\Lambda_a(t\\mid\\tau) &:= \\mathrm{pr}(t\\le T_a &lt; t + {\\rm d} t\\mid T_a\\geq t, D_a&gt;\\color{red}{\\tau})\\\\\n&\\leq \\mathrm{pr}(t\\le T_a &lt; t + {\\rm d} t\\mid T_a\\geq t, D_a\\geq \\color{red}{t})\\\\\n&\\approx \\frac{N_a^{\\rm E}}{N_a^*}{\\rm d}\\hat\\Lambda_a^*(u)\n\\end{align}\\]\n\nNotation\n\n\\(N_a^{\\rm E}\\): number of nonfatal events\n\\(N_a^*\\): number of composite (EFS) endpoints\n\\(\\hat\\Lambda_a^*(t)=-\\log \\hat S_a^*(t)\\): cumulative hazard of EFS\n\nInequality when cross ratio \\(\\kappa(t, s)\\geq 1\\) (positive association)\nMake up for bias by approximating \\(\\kappa(t, s)\\)"
+    "text": "Approxmation - Idea\n\nStart with \\(t\\)-survivors \\[\\begin{align}\n\\mathrm{d}\\Lambda_a(t\\mid\\tau) &:= \\mathrm{pr}(t\\le T_a &lt; t + \\mathrm{d} t\\mid T_a\\geq t, D_a&gt;\\color{red}{\\tau})\\\\\n&\\leq \\mathrm{pr}(t\\le T_a &lt; t + \\mathrm{d} t\\mid T_a\\geq t, D_a\\geq \\color{red}{t})\\\\\n&\\approx \\frac{N_a^{\\rm E}}{N_a^*}\\mathrm{d}\\hat\\Lambda_a^*(u)\n\\end{align}\\]\n\nNotation\n\n\\(N_a^{\\rm E}\\): number of nonfatal events\n\\(N_a^*\\): number of composite (EFS) endpoints\n\\(\\hat\\Lambda_a^*(t)=-\\log \\hat S_a^*(t)\\): cumulative hazard of EFS\n\nInequality when cross ratio \\(\\kappa(t, s)\\geq 1\\) (positive association)\nMake up for bias by approximating \\(\\kappa(t, s)\\)"
   },
   {
     "objectID": "presentation.html#cross-ratio",
     "href": "presentation.html#cross-ratio",
     "title": "WinKM: Approximating win-loss probabilities",
     "section": "Cross Ratio",
-    "text": "Cross Ratio\n\nLocal dependence (Oakes, 1982, 1986) \\[\\begin{align*}\\label{eq:cr:def}\n  \\kappa_a(t, s) &=\\frac{\\mathrm{pr}(t\\leq T_a&lt; t +{\\rm d} t\\mid T_a\\geq t,  D_a = s )}\n{\\mathrm{pr}(t\\leq T_a&lt; t +{\\rm d} t\\mid T_a\\geq t, D_a \\geq s)}  \\notag\\\\\n& = \\frac{H_a(t, s)\\partial^2 H_a(t, s)/(\\partial t\\partial s)}\n{\\{\\partial H_a(t, s)/\\partial t\\}\\{\\partial H_a(t, s)/\\partial s\\}}\n\\end{align*}\\]\n\nRelative change in nonfatal event risk at \\(t\\) with death at \\(s\\)\n\nUnder Gumbel–Hougaard copula (Oakes, 1989) \\[\n\\hat\\kappa_a(t, s) \\approx  1 + (\\hat\\theta_a - 1)\\hat\\Lambda_a^*(s)^{-1}\n\\]\n\n\\(\\hat\\theta\\): estimated association parameter"
+    "text": "Cross Ratio\n\nLocal dependence (Oakes, 1982, 1986) \\[\\begin{align*}\\label{eq:cr:def}\n  \\kappa_a(t, s) &=\\frac{\\mathrm{pr}(t\\leq T_a&lt; t +\\mathrm{d} t\\mid T_a\\geq t,  D_a = s )}\n{\\mathrm{pr}(t\\leq T_a&lt; t +\\mathrm{d} t\\mid T_a\\geq t, D_a \\geq s)}  \\notag\\\\\n& = \\frac{H_a(t, s)\\partial^2 H_a(t, s)/(\\partial t\\partial s)}\n{\\{\\partial H_a(t, s)/\\partial t\\}\\{\\partial H_a(t, s)/\\partial s\\}}\n\\end{align*}\\]\n\nRelative change in nonfatal event risk at \\(t\\) with death at \\(s\\)\n\nUnder Gumbel–Hougaard copula (Oakes, 1989) \\[\n\\hat\\kappa_a(t, s) \\approx  1 + (\\hat\\theta_a - 1)\\hat\\Lambda_a^*(s)^{-1}\n\\]\n\n\\(\\hat\\theta\\): estimated association parameter"
   },
   {
     "objectID": "presentation.html#association-parameter",
@@ -137,14 +137,14 @@
     "href": "presentation.html#approxmation---formula",
     "title": "WinKM: Approximating win-loss probabilities",
     "section": "Approxmation - Formula",
-    "text": "Approxmation - Formula\n\nFormula \\[\nH_a(t\\mid\\tau) \\approx \\prod_{0\\leq u \\leq t}\\left(1 - \\frac{N_a^{\\rm E}}{N_a^*}{\\rm d}\\hat\\Lambda_a^*(u)\\underbrace{\\prod_{u\\leq s \\leq \\tau}\n   \\left[1 - \\{\\hat\\kappa_a(u, s)-1\\}\\frac{{\\rm d}\\hat F_a(s)}{\\hat S_a(s)}\\right]}_{\\text{Bias correction for $\\tau$-survivorship}}\\right)\n\\]\nSummary data needed\n\n\\(\\hat S_a(t)\\), \\(\\hat S_a^*(t)\\): scan KM curves for OS and EFS (WebPlotDigitizer)\n\\(N_a^{\\rm E}\\), \\(N_a^{\\rm D}\\), \\(N_a^*\\): event counts reported in paper or CONSORT diagram\n\\(L_a^{\\rm OS}\\), \\(L_a^*\\): total follow-up times calculated from risk table"
+    "text": "Approxmation - Formula\n\nFormula \\[\nH_a(t\\mid\\tau) \\approx \\prod_{0\\leq u \\leq t}\\left(1 - \\frac{N_a^{\\rm E}}{N_a^*}\\mathrm{d}\\hat\\Lambda_a^*(u)\\underbrace{\\prod_{u\\leq s \\leq \\tau}\n   \\left[1 - \\{\\hat\\kappa_a(u, s)-1\\}\\frac{\\mathrm{d}\\hat F_a(s)}{\\hat S_a(s)}\\right]}_{\\text{Bias correction for $\\tau$-survivorship}}\\right)\n\\]\nSummary data needed\n\n\\(\\hat S_a(t)\\), \\(\\hat S_a^*(t)\\): scan KM curves for OS and EFS (WebPlotDigitizer)\n\\(N_a^{\\rm E}\\), \\(N_a^{\\rm D}\\), \\(N_a^*\\): event counts reported in paper or CONSORT diagram\n\\(L_a^{\\rm OS}\\), \\(L_a^*\\): total follow-up times calculated from risk table"
   },
   {
     "objectID": "presentation.html#winkm-workflow",
     "href": "presentation.html#winkm-workflow",
     "title": "WinKM: Approximating win-loss probabilities",
     "section": "WinKM Workflow",
-    "text": "WinKM Workflow\n\nA step-by-step approach\n\nprepare_km_data(): read and clean digitized KM data\nmerge_endpoints(): align OS and PFS on a common time grid\ncompute_increments(): calculate \\({\\rm d}\\hat S_a(t)\\) and \\({\\rm d}\\hat S^*_a(t)\\)\ncompute_followup(): derive total follow-up times from at-risk tables\ncompute_theta(): compute association parameters (\\(\\theta_a\\))\ncompute_win_loss(): calculate final win/loss probabilities\n\nAn all-in-one approach using run_win_loss_workflow()\nVisit package website for details"
+    "text": "WinKM Workflow\n\nA step-by-step approach\n\nprepare_km_data(): read and clean digitized KM data\nmerge_endpoints(): align OS and PFS on a common time grid\ncompute_increments(): calculate \\(\\mathrm{d}\\hat S_a(t)\\) and \\(\\mathrm{d}\\hat S^*_a(t)\\)\ncompute_followup(): derive total follow-up times from at-risk tables\ncompute_theta(): compute association parameters (\\(\\theta_a\\))\ncompute_win_loss(): calculate final win/loss probabilities\n\nAn all-in-one approach using run_win_loss_workflow()\nVisit package website for details"
   },
   {
     "objectID": "presentation.html#colon-cancer-trial",
