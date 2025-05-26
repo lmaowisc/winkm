@@ -37,18 +37,8 @@ $$
 \def\bs{\boldsymbol}
 \newcommand{\red}{}
 \newcommand{\indep}{\perp \!\!\! \perp}
-\def\pr{{\rm pr}}
-\def\d{{\rm d}}
-\def\W{{\mathcal W}}
-\def\H{{\mathcal H}}
-\def\I{{\mathcal I}}
-\def\C{{\mathcal C}}
-\def\S{{\mathcal S}}
-\def\Sk{{\mathcal S}^{(k)}}
-\def\Skm{{\mathcal S}^{(-k)}}
-\def\v{\varepsilon}
-\def\bSig\mathbf{\Sigma}
-\def\Un{\sum_{i=1}^{n-1}\sum_{j=i+1}^n}
+<!-- \def\pr{{\rm pr}} -->
+<!-- \def\d{{\rm d}} -->
 $$
 
 ## Outline
@@ -87,20 +77,20 @@ $$
     -   $T_a^* = D_a\wedge T_a$: Event-free survival (EFS) time
     -   $a = 1$: treatment; 0: control
 -   **Summary functions**
-    -   **Joint survival**: $H_a(t, s)=\pr(T_a>t, D_a> s)$ - likely unavailable
-    -   **OS**: $S_a(t) =\pr(D_a > t)$ - available through Kaplan-Meier (KM) curve
-    -   **EFS**: $S_a^*(t) =\pr(T_a^* > t)$ - available through KM curve
+    -   **Joint survival**: $H_a(t, s)=\mathrm{pr}(T_a>t, D_a> s)$ - likely unavailable
+    -   **OS**: $S_a(t) =\mathrm{pr}(D_a > t)$ - available through Kaplan-Meier (KM) curve
+    -   **EFS**: $S_a^*(t) =\mathrm{pr}(T_a^* > t)$ - available through KM curve
 
 ## Win-Loss Estimands
 
 -   **Win-loss probabilities** [@oakes:2016]\begin{align}
-     w_{a, 1-a}(\tau) &= \pr(\mbox{Group $a$ wins by time $\tau$})\notag\\
-     &=\pr\underbrace{(D_{1-a}<D_a\wedge \tau)}_{\mbox{Win on OS}} + 
-     \pr\underbrace{(D_1\wedge D_0 >\tau, T_{1-a}<T_a\wedge \tau)}_{\mbox{Tie on OS,
+     w_{a, 1-a}(\tau) &= \mathrm{pr}(\mbox{Group $a$ wins by time $\tau$})\notag\\
+     &=\mathrm{pr}\underbrace{(D_{1-a}<D_a\wedge \tau)}_{\mbox{Win on OS}} + 
+     \mathrm{pr}\underbrace{(D_1\wedge D_0 >\tau, T_{1-a}<T_a\wedge \tau)}_{\mbox{Tie on OS,
      win on nonfatal}}\notag\\
-     &= \int_0^\tau \color{blue}{S_a(t-)\d F_{1-a}(t)} 
+     &= \int_0^\tau \color{blue}{S_a(t-){\rm d} F_{1-a}(t)} 
      \quad\quad\quad\quad \big(F_a(t) = 1 - S_a(t)\big)\\
-     &\hspace{1em}+\color{blue}{S_1(\tau)S_0(\tau)} \int_0^\tau \color{red}{\pr(T_a >t\mid D_a>\tau) \pr(t\leq T_{1-a} <t +\d t\mid D_{1-a}>\tau)}
+     &\hspace{1em}+\color{blue}{S_1(\tau)S_0(\tau)} \int_0^\tau \color{red}{\mathrm{pr}(T_a >t\mid D_a>\tau) \mathrm{pr}(t\leq T_{1-a} <t +{\rm d} t\mid D_{1-a}>\tau)}
     \end{align}
     -   **Win ratio**: $w_{1,0}(\tau)/w_{0,1}(\tau)$
     -   **Win odds**: $w_{1,0}(\tau)/w_{0,1}(\tau)$
@@ -109,20 +99,20 @@ $$
 ## Survival-Conditional Event Rate
 
 -   **Second-term unknown** \begin{align}
-    &\int_0^\tau \color{red}{\pr(T_a >t\mid D_a>\tau) \pr(t\leq T_{1-a} <t +\d t\mid D_{1-a}>\tau)}\\
-    =& -\int_0^\tau \color{red}{H_a(t\mid \tau) H_{1-a}(\d t\mid \tau)}\\
-    =&\,\color{red}{\pr(T_{1-a}<T_a\wedge \tau\mid D_1 > \tau, D_0 >\tau)}
+    &\int_0^\tau \color{red}{\mathrm{pr}(T_a >t\mid D_a>\tau) \mathrm{pr}(t\leq T_{1-a} <t +{\rm d} t\mid D_{1-a}>\tau)}\\
+    =& -\int_0^\tau \color{red}{H_a(t\mid \tau) H_{1-a}({\rm d} t\mid \tau)}\\
+    =&\,\color{red}{\mathrm{pr}(T_{1-a}<T_a\wedge \tau\mid D_1 > \tau, D_0 >\tau)}
     \end{align}
-    -   $H_a(t\mid \tau)=\pr(T_a>t\mid D_a>\tau)$: event-free probabilities in $\tau$-survivors
+    -   $H_a(t\mid \tau)=\mathrm{pr}(T_a>t\mid D_a>\tau)$: event-free probabilities in $\tau$-survivors
     -   *Association* between death and nonfatal event
     -   Approximate it using $S_a(t), S^*_a(t)$, and component-specific event counts
 
 ## Approxmation - Idea
 
 -   **Start with** $t$-survivors \begin{align}
-    \d\Lambda_a(t\mid\tau) &:= \pr(t\le T_a < t + \d t\mid T_a\geq t, D_a>\color{red}{\tau})\\
-    &\leq \pr(t\le T_a < t + \d t\mid T_a\geq t, D_a\geq \color{red}{t})\\
-    &\approx \frac{N_a^{\rm E}}{N_a^*}\d\hat\Lambda_a^*(u)
+    {\rm d}\Lambda_a(t\mid\tau) &:= \mathrm{pr}(t\le T_a < t + {\rm d} t\mid T_a\geq t, D_a>\color{red}{\tau})\\
+    &\leq \mathrm{pr}(t\le T_a < t + {\rm d} t\mid T_a\geq t, D_a\geq \color{red}{t})\\
+    &\approx \frac{N_a^{\rm E}}{N_a^*}{\rm d}\hat\Lambda_a^*(u)
     \end{align}
     -   Notation
         -   $N_a^{\rm E}$: number of nonfatal events
@@ -134,8 +124,8 @@ $$
 ## Cross Ratio
 
 -   **Local dependence** [@oakes:1982; @oakes:1986] \begin{align*}\label{eq:cr:def}
-      \kappa_a(t, s) &=\frac{\pr(t\leq T_a< t +\d t\mid T_a\geq t,  D_a = s )}
-    {\pr(t\leq T_a< t +\d t\mid T_a\geq t, D_a \geq s)}  \notag\\
+      \kappa_a(t, s) &=\frac{\mathrm{pr}(t\leq T_a< t +{\rm d} t\mid T_a\geq t,  D_a = s )}
+    {\mathrm{pr}(t\leq T_a< t +{\rm d} t\mid T_a\geq t, D_a \geq s)}  \notag\\
     & = \frac{H_a(t, s)\partial^2 H_a(t, s)/(\partial t\partial s)}
     {\{\partial H_a(t, s)/\partial t\}\{\partial H_a(t, s)/\partial s\}}
     \end{align*}
@@ -159,8 +149,8 @@ $$
 ## Approxmation - Formula
 
 -   **Formula** $$
-    H_a(t\mid\tau) \approx \prod_{0\leq u \leq t}\left(1 - \frac{N_a^{\rm E}}{N_a^*}\d\hat\Lambda_a^*(u)\underbrace{\prod_{u\leq s \leq \tau}
-       \left[1 - \{\hat\kappa_a(u, s)-1\}\frac{\d\hat F_a(s)}{\hat S_a(s)}\right]}_{\text{Bias correction for $\tau$-survivorship}}\right)
+    H_a(t\mid\tau) \approx \prod_{0\leq u \leq t}\left(1 - \frac{N_a^{\rm E}}{N_a^*}{\rm d}\hat\Lambda_a^*(u)\underbrace{\prod_{u\leq s \leq \tau}
+       \left[1 - \{\hat\kappa_a(u, s)-1\}\frac{{\rm d}\hat F_a(s)}{\hat S_a(s)}\right]}_{\text{Bias correction for $\tau$-survivorship}}\right)
     $$
 
 -   **Summary data needed**
@@ -174,7 +164,7 @@ $$
 -   A **step-by-step** approach
     -   `prepare_km_data()`: read and clean digitized KM data
     -   `merge_endpoints()`: align OS and PFS on a common time grid
-    -   `compute_increments()`: calculate $\d\hat S_a(t)$ and $\d\hat S^*_a(t)$
+    -   `compute_increments()`: calculate ${\rm d}\hat S_a(t)$ and ${\rm d}\hat S^*_a(t)$
     -   `compute_followup()`: derive total follow-up times from at-risk tables
     -   `compute_theta()`: compute association parameters ($\theta_a$)
     -   `compute_win_loss()`: calculate final win/loss probabilities
