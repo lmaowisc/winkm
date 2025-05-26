@@ -144,7 +144,7 @@ df_increments <- compute_increments(df_km)
 #  5 Placebo 0.536 0.995 0.998 1.00  0.00491   1.00  0.00352   0.00352 
 ```
 
-Plot the digitized data and compare with the original KM curves of @luo2021 ([Figure 2](https://cdn.jamanetwork.com/ama/content_public/journal/jama/938771/joi210086f2_1631212840.67618.png?Expires=1742906986&Signature=WCvbxcuOTh8hPw~iEh2XWTNts3Pz7nUT7PohXwdZZYqGDMfjAiYi5E~UCPFkZNQVJH7X01c4SzFLqV-q6EBpTdfxKDBJ49kk-oXN9JcsQZ1gvGgPRwhm0j-a6SVDPNCsifiOPEY3dyc0Qcj0d2pXChb51nNA1luMmDM9ngPAdBPy5cLVm9~Ao0TC9mzWD2cRrTbpD82YCwVQ8ukSieJWMsv9zoNjKjw0hnXgSNuAu6J6dWMH61P9LRPDTvpI6fgBYoD4h6Xo7aERiRMgh8ExIGZQgwBmNCJBcupPRu-10NTHH4BnLgM-eitKI0EG96a0pRDVy8mDe5FzqwtmfuQPvw__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA)):
+Plot the digitized data and compare with the original KM curves of @@luo:2021 ([Figure 2](https://cdn.jamanetwork.com/ama/content_public/journal/jama/938771/joi210086f2_1631212840.67618.png?Expires=1742906986&Signature=WCvbxcuOTh8hPw~iEh2XWTNts3Pz7nUT7PohXwdZZYqGDMfjAiYi5E~UCPFkZNQVJH7X01c4SzFLqV-q6EBpTdfxKDBJ49kk-oXN9JcsQZ1gvGgPRwhm0j-a6SVDPNCsifiOPEY3dyc0Qcj0d2pXChb51nNA1luMmDM9ngPAdBPy5cLVm9~Ao0TC9mzWD2cRrTbpD82YCwVQ8ukSieJWMsv9zoNjKjw0hnXgSNuAu6J6dWMH61P9LRPDTvpI6fgBYoD4h6Xo7aERiRMgh8ExIGZQgwBmNCJBcupPRu-10NTHH4BnLgM-eitKI0EG96a0pRDVy8mDe5FzqwtmfuQPvw__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA)):
 
 ```{r}
 #| code-fold: true
@@ -374,6 +374,6 @@ stats |>
 
 -   WR: Win ratio; WO: Win odds; NB: Net benefit.
 
-Interestingly, the inverse of 18-month win ratio for OS is 1/1.39=0.72, which is close to the hazard ratio of 0.70 reported in the paper. This is expected when the PH assumption is true [@oakes2016].
+Interestingly, the inverse of 18-month win ratio for OS is 1/1.39=0.72, which is close to the hazard ratio of 0.70 reported in the paper. This is expected when the PH assumption is true [@oakes:2016].
 
 ## References
