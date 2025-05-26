@@ -55,7 +55,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -260,7 +280,7 @@ window.Quarto = {
 </section>
 <section id="original-study" class="level3">
 <h3 class="anchored" data-anchor-id="original-study">Original study</h3>
-<p>Consider the ESCORT-1st trial <span class="citation" data-cites="luo2021">(<a href="#ref-luo2021" role="doc-biblioref"><strong>luo2021?</strong></a>, open-access)</span> that compares the efficacy of <strong>camrelizumab</strong> (<span class="math inline">\(N=298\)</span>) versus <strong>placebo</strong> (<span class="math inline">\(N=298\)</span>) (both in combination with chemotherapy) in patients with advanced esophageal squamous cell carcinoma on the <em>co-primary endpoints</em> of</p>
+<p>Consider the ESCORT-1st trial <span class="citation" data-cites="luo:2021">(<a href="#ref-luo:2021" role="doc-biblioref">Luo et al. 2021</a>, open-access)</span> that compares the efficacy of <strong>camrelizumab</strong> (<span class="math inline">\(N=298\)</span>) versus <strong>placebo</strong> (<span class="math inline">\(N=298\)</span>) (both in combination with chemotherapy) in patients with advanced esophageal squamous cell carcinoma on the <em>co-primary endpoints</em> of</p>
 <ul>
 <li><strong>Overall survival</strong> (OS);</li>
 <li><strong>Progression free survival</strong> (PFS).</li>
@@ -663,12 +683,17 @@ window.Quarto = {
 </section>
 </section>
 <section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
+
+
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-luo:2021" class="csl-entry" role="listitem">
+Luo, Huiyan, Jin Lu, Yuxian Bai, Teng Mao, Jun Wang, Qingxia Fan, Yiping Zhang, et al. 2021. <span>“Effect of Camrelizumab Vs Placebo Added to Chemotherapy on Survival and Progression-Free Survival in Patients with Advanced or Metastatic Esophageal Squamous Cell Carcinoma: The ESCORT-1st Randomized Clinical Trial.”</span> <em>Jama</em> 326 (10): 916–25.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

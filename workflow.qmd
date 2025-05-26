@@ -14,7 +14,7 @@ using KM and summary data:
 - `prepare_km_data()` to read and clean digitized KM data.
 - `merge_endpoints()` to align OS and PFS on a common time grid.
 - `compute_increments()` to calculate small increments/decrements for OS/PFS needed
-to calculate win-loss probabilities [@oakes2016].
+to calculate win-loss probabilities [@oakes:2016].
 - `compute_followup()` to derive total follow-up times from at-risk tables.
 - `compute_theta()` to compute association parameters ($\theta$) between the two endpoints.
 - `compute_win_loss()` to calculate final win/loss probabilities with or without $\theta$.

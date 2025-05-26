@@ -180,7 +180,7 @@ window.Quarto = {
 <span class="menu-text">Workflow</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./case.html"> 
+    <a class="nav-link" href="./cases/index.html"> 
 <span class="menu-text">Case Studies</span></a>
   </li>  
   <li class="nav-item">
@@ -247,7 +247,7 @@ window.Quarto = {
 <ul>
 <li><code>prepare_km_data()</code> to read and clean digitized KM data.</li>
 <li><code>merge_endpoints()</code> to align OS and PFS on a common time grid.</li>
-<li><code>compute_increments()</code> to calculate small increments/decrements for OS/PFS needed to calculate win-loss probabilities <span class="citation" data-cites="oakes2016">(<a href="#ref-oakes2016" role="doc-biblioref">Oakes 2016</a>)</span>.</li>
+<li><code>compute_increments()</code> to calculate small increments/decrements for OS/PFS needed to calculate win-loss probabilities <span class="citation" data-cites="oakes:2016">(<a href="#ref-oakes:2016" role="doc-biblioref">Oakes 2016</a>)</span>.</li>
 <li><code>compute_followup()</code> to derive total follow-up times from at-risk tables.</li>
 <li><code>compute_theta()</code> to compute association parameters (<span class="math inline">\(\theta\)</span>) between the two endpoints.</li>
 <li><code>compute_win_loss()</code> to calculate final win/loss probabilities with or without <span class="math inline">\(\theta\)</span>.</li>
@@ -322,7 +322,7 @@ window.Quarto = {
 </section>
 <section id="compute-increments-compute_increments" class="level3">
 <h3 class="anchored" data-anchor-id="compute-increments-compute_increments">3. Compute increments: <code>compute_increments()</code></h3>
-<p><strong>Purpose:</strong> Compute small decrements in survival probabilities for OS and PFS in preparation for calculation of win-loss estimands <span class="citation" data-cites="oakes2016">(<a href="#ref-oakes2016" role="doc-biblioref">Oakes 2016</a>)</span>.</p>
+<p><strong>Purpose:</strong> Compute small decrements in survival probabilities for OS and PFS in preparation for calculation of win-loss estimands <span class="citation" data-cites="oakes2016">(<a href="#ref-oakes2016" role="doc-biblioref"><strong>oakes2016?</strong></a>)</span>.</p>
 <p><strong>Main Inputs:</strong></p>
 <ul>
 <li><code>df_km</code>: A long-format tibble with columns <code>group</code>, <code>time</code>, <code>os</code> <span class="math inline">\((\hat S(t))\)</span>, <code>pfs</code> <span class="math inline">\((\hat S^*(t))\)</span> (e.g.&nbsp;from <code>merge_endpoints()</code>).</li>
@@ -481,8 +481,8 @@ window.Quarto = {
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-oakes2016" class="csl-entry" role="listitem">
-Oakes, D. 2016. <span>“On the Win-Ratio Statistic in Clinical Trials with Multiple Types of Event.”</span> <em>Biometrika</em> 103 (3): 742–45. <a href="https://doi.org/10.1093/biomet/asw026">https://doi.org/10.1093/biomet/asw026</a>.
+<div id="ref-oakes:2016" class="csl-entry" role="listitem">
+Oakes, D. 2016. <span>“On the Win-Ratio Statistic in Clinical Trials with Multiple Types of Event.”</span> <em>Biometrika</em> 103 (3): 742–45.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
