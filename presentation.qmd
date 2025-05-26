@@ -300,7 +300,7 @@ $$
     -   Total follow-up times (from risk tables)
 -   **Adding standard errors**
     -   Optimal combination of study-specific effect sizes
-    -   Assessment of between-study heterogeneities
+    -   Assessment of between-study heterogeneity
 
 ## References
 
