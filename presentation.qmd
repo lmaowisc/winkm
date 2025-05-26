@@ -302,6 +302,7 @@ $$
     -   Optimal combination of study-specific effect sizes
     -   Assessment of between-study heterogeneity
 
+
 ## References
 
 ::: {#refs}
