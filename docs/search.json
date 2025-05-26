@@ -235,7 +235,7 @@
     "href": "presentation.html#summary-and-future-work",
     "title": "WinKM: Approximating win-loss probabilities",
     "section": "Summary and Future Work",
-    "text": "Summary and Future Work\n\nWinKM: approximating win-loss measures using published OS and EFS data\n\nScanned KM curves\nEvent counts (deaths, EFS endpoints, nonfatal events)\nTotal follow-up times (from risk tables)\n\nAdding standard errors\n\nOptimal combination of study-specific effect sizes\nAssessment of between-study heterogeneity"
+    "text": "Summary and Future Work\n\nWinKM: approximating win-loss measures using published OS and EFS data\n\nScanned KM curves\nEvent counts (deaths, EFS endpoints, nonfatal events)\nTotal follow-up times (from risk tables)\n\nAdding standard errors\n\nOptimal combination of study-specific effect sizes\nAssessment of between-study heterogeneities"
   },
   {
     "objectID": "presentation.html#main-paper",
