@@ -172,7 +172,7 @@
     "href": "presentation.html#cross-ratio",
     "title": "WinKM: Approximating win-loss probabilities",
     "section": "Cross Ratio",
-    "text": "Cross Ratio\n\nLocal dependence (Oakes, 1982, 1986) \\[\\begin{align*}\\label{eq:cr:def}\n  \\kappa_a(t, s) &=\\frac{\\pr(t\\leq T_a&lt; t +\\d t\\mid T_a\\geq t,  D_a = s )}\n{\\pr(t\\leq T_a&lt; t +\\d t\\mid T_a\\geq t, D_a \\geq s)}  \\notag\\\\\n& = \\frac{H_a(t, s)\\partial^2 H_a(t, s)/(\\partial t\\partial s)}\n{\\{\\partial H_a(t, s)/\\partial t\\}\\{\\partial H_a(t, s)/\\partial s\\}}.\n\\end{align*}\\]\n\nRelative change in nonfatal event risk at \\(t\\) with death at \\(s\\)\n\nUnder Gumbel–Hougaard copula (Oakes, 1989) \\[\n\\hat\\kappa_a(t, s) \\approx  1 + (\\hat\\theta_a - 1)\\hat\\Lambda_a^*(s)^{-1}\n\\]\n\n\\(\\hat\\theta\\): estimated association parameter"
+    "text": "Cross Ratio\n\nLocal dependence (Oakes, 1982, 1986) \\[\\begin{align*}\\label{eq:cr:def}\n  \\kappa_a(t, s) &=\\frac{\\pr(t\\leq T_a&lt; t +\\d t\\mid T_a\\geq t,  D_a = s )}\n{\\pr(t\\leq T_a&lt; t +\\d t\\mid T_a\\geq t, D_a \\geq s)}  \\notag\\\\\n& = \\frac{H_a(t, s)\\partial^2 H_a(t, s)/(\\partial t\\partial s)}\n{\\{\\partial H_a(t, s)/\\partial t\\}\\{\\partial H_a(t, s)/\\partial s\\}}\n\\end{align*}\\]\n\nRelative change in nonfatal event risk at \\(t\\) with death at \\(s\\)\n\nUnder Gumbel–Hougaard copula (Oakes, 1989) \\[\n\\hat\\kappa_a(t, s) \\approx  1 + (\\hat\\theta_a - 1)\\hat\\Lambda_a^*(s)^{-1}\n\\]\n\n\\(\\hat\\theta\\): estimated association parameter"
   },
   {
     "objectID": "presentation.html#approxmation---formula",

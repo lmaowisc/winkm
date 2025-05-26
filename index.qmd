@@ -11,6 +11,7 @@ bibliography: references.bib
 
 - **[Presentation](presentation.html)** (5/30/2025)
 
+
 ## Basic idea
 
 The basic idea is to consider the win and loss proportions by a certain time as a functional of the joint distribution of OS and EFS. Since we only have the marginal distributions through the KM curves, we will need to infer their associations via additional summary data like *total event counts and rates*.

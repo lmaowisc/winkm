@@ -138,7 +138,7 @@ $$
       \kappa_a(t, s) &=\frac{\pr(t\leq T_a< t +\d t\mid T_a\geq t,  D_a = s )}
     {\pr(t\leq T_a< t +\d t\mid T_a\geq t, D_a \geq s)}  \notag\\
     & = \frac{H_a(t, s)\partial^2 H_a(t, s)/(\partial t\partial s)}
-    {\{\partial H_a(t, s)/\partial t\}\{\partial H_a(t, s)/\partial s\}}.
+    {\{\partial H_a(t, s)/\partial t\}\{\partial H_a(t, s)/\partial s\}}
     \end{align*}
     -   Relative change in nonfatal event risk at $t$ with death at $s$
 -   **Under Gumbel--Hougaard copula** [@oakes:1989] $$
