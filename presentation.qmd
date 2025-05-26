@@ -37,8 +37,6 @@ $$
 \def\bs{\boldsymbol}
 \newcommand{\red}{}
 \newcommand{\indep}{\perp \!\!\! \perp}
-<!-- \def\pr{{\rm pr}} -->
-<!-- \def\d{{\rm d}} -->
 $$
 
 ## Outline
