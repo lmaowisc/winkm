@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.6.39">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-05-21">
+<meta name="dcterms.date" content="2025-05-26">
 
-<title>WinKM - Calculating win-loss statistics using summary data</title>
+<title>Calculating win-loss statistics using summary data – WinKM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -34,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -55,27 +55,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -90,10 +70,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-336159a942db37dbcdba24a03c4510ed.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -122,7 +102,7 @@ div.csl-indent {
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -167,7 +147,7 @@ window.Quarto = {
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -190,7 +170,7 @@ window.Quarto = {
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -236,7 +216,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 21, 2025</p>
+      <p class="date">May 26, 2025</p>
     </div>
   </div>
   
@@ -249,6 +229,9 @@ window.Quarto = {
 
 
 <p><strong>WinKM</strong> provides a simple way to calculate win-loss statistics using summary data. This is useful when you have access to only published Kaplan-Meier (KM) curves of <em>overall survival</em> (OS) and nonfatal <em>event-free survival time</em> (EFS), but not the individual patient data, as is often the case in <strong>systematic reviews</strong> and <strong>meta-analyses</strong>.</p>
+<ul>
+<li><strong><a href="presentation.html" target="_blank">Presentation</a></strong> (5/30/2025)</li>
+</ul>
 <section id="basic-idea" class="level2">
 <h2 class="anchored" data-anchor-id="basic-idea">Basic idea</h2>
 <p>The basic idea is to consider the win and loss proportions by a certain time as a functional of the joint distribution of OS and EFS. Since we only have the marginal distributions through the KM curves, we will need to infer their associations via additional summary data like <em>total event counts and rates</em>.</p>
@@ -277,7 +260,7 @@ window.Quarto = {
 </section>
 <section id="original-study" class="level3">
 <h3 class="anchored" data-anchor-id="original-study">Original study</h3>
-<p>Consider the ESCORT-1st trial <span class="citation" data-cites="luo2021">(<a href="#ref-luo2021" role="doc-biblioref">Luo et al. 2021</a>, open-access)</span> that compares the efficacy of <strong>camrelizumab</strong> (<span class="math inline">\(N=298\)</span>) versus <strong>placebo</strong> (<span class="math inline">\(N=298\)</span>) (both in combination with chemotherapy) in patients with advanced esophageal squamous cell carcinoma on the <em>co-primary endpoints</em> of</p>
+<p>Consider the ESCORT-1st trial <span class="citation" data-cites="luo2021">(<a href="#ref-luo2021" role="doc-biblioref"><strong>luo2021?</strong></a>, open-access)</span> that compares the efficacy of <strong>camrelizumab</strong> (<span class="math inline">\(N=298\)</span>) versus <strong>placebo</strong> (<span class="math inline">\(N=298\)</span>) (both in combination with chemotherapy) in patients with advanced esophageal squamous cell carcinoma on the <em>co-primary endpoints</em> of</p>
 <ul>
 <li><strong>Overall survival</strong> (OS);</li>
 <li><strong>Progression free survival</strong> (PFS).</li>
@@ -361,7 +344,7 @@ window.Quarto = {
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">#  4 Placebo 0.204 1.00  1.00  1     0.000366  1.00  0         0        </span></span>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  5 Placebo 0.536 0.995 0.998 1.00  0.00491   1.00  0.00352   0.00352 </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Plot the digitized data and compare with the original KM curves of <span class="citation" data-cites="luo2021">Luo et al. (<a href="#ref-luo2021" role="doc-biblioref">2021</a>)</span> (<a href="https://cdn.jamanetwork.com/ama/content_public/journal/jama/938771/joi210086f2_1631212840.67618.png?Expires=1742906986&amp;Signature=WCvbxcuOTh8hPw~iEh2XWTNts3Pz7nUT7PohXwdZZYqGDMfjAiYi5E~UCPFkZNQVJH7X01c4SzFLqV-q6EBpTdfxKDBJ49kk-oXN9JcsQZ1gvGgPRwhm0j-a6SVDPNCsifiOPEY3dyc0Qcj0d2pXChb51nNA1luMmDM9ngPAdBPy5cLVm9~Ao0TC9mzWD2cRrTbpD82YCwVQ8ukSieJWMsv9zoNjKjw0hnXgSNuAu6J6dWMH61P9LRPDTvpI6fgBYoD4h6Xo7aERiRMgh8ExIGZQgwBmNCJBcupPRu-10NTHH4BnLgM-eitKI0EG96a0pRDVy8mDe5FzqwtmfuQPvw__&amp;Key-Pair-Id=APKAIE5G5CRDK6RD3PGA" target="_blank">Figure 2</a>):</p>
+<p>Plot the digitized data and compare with the original KM curves of <span class="citation" data-cites="luo2021">(<a href="#ref-luo2021" role="doc-biblioref"><strong>luo2021?</strong></a>)</span> (<a href="https://cdn.jamanetwork.com/ama/content_public/journal/jama/938771/joi210086f2_1631212840.67618.png?Expires=1742906986&amp;Signature=WCvbxcuOTh8hPw~iEh2XWTNts3Pz7nUT7PohXwdZZYqGDMfjAiYi5E~UCPFkZNQVJH7X01c4SzFLqV-q6EBpTdfxKDBJ49kk-oXN9JcsQZ1gvGgPRwhm0j-a6SVDPNCsifiOPEY3dyc0Qcj0d2pXChb51nNA1luMmDM9ngPAdBPy5cLVm9~Ao0TC9mzWD2cRrTbpD82YCwVQ8ukSieJWMsv9zoNjKjw0hnXgSNuAu6J6dWMH61P9LRPDTvpI6fgBYoD4h6Xo7aERiRMgh8ExIGZQgwBmNCJBcupPRu-10NTHH4BnLgM-eitKI0EG96a0pRDVy8mDe5FzqwtmfuQPvw__&amp;Key-Pair-Id=APKAIE5G5CRDK6RD3PGA" target="_blank">Figure 2</a>):</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Plot KM curves</summary>
@@ -676,24 +659,16 @@ window.Quarto = {
 <ul>
 <li>WR: Win ratio; WO: Win odds; NB: Net benefit.</li>
 </ul>
-<p>Interestingly, the inverse of 18-month win ratio for OS is 1/1.39=0.72, which is close to the hazard ratio of 0.70 reported in the paper. This is expected when the PH assumption is true <span class="citation" data-cites="oakes2016">(<a href="#ref-oakes2016" role="doc-biblioref">Oakes 2016</a>)</span>.</p>
+<p>Interestingly, the inverse of 18-month win ratio for OS is 1/1.39=0.72, which is close to the hazard ratio of 0.70 reported in the paper. This is expected when the PH assumption is true <span class="citation" data-cites="oakes2016">(<a href="#ref-oakes2016" role="doc-biblioref"><strong>oakes2016?</strong></a>)</span>.</p>
 </section>
 </section>
 <section id="references" class="level2">
-
-
+<h2 class="anchored" data-anchor-id="references">References</h2>
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-luo2021" class="csl-entry" role="listitem">
-Luo, Huiyan, Jin Lu, Yuxian Bai, Teng Mao, Jun Wang, Qingxia Fan, Yiping Zhang, et al. 2021. <span>“Effect of Camrelizumab Vs Placebo Added to Chemotherapy on Survival and Progression-Free Survival in Patients With Advanced or Metastatic Esophageal Squamous Cell Carcinoma.”</span> <em>JAMA</em> 326 (10): 916. <a href="https://doi.org/10.1001/jama.2021.12836">https://doi.org/10.1001/jama.2021.12836</a>.
-</div>
-<div id="ref-oakes2016" class="csl-entry" role="listitem">
-Oakes, D. 2016. <span>“On the Win-Ratio Statistic in Clinical Trials with Multiple Types of Event.”</span> <em>Biometrika</em> 103 (3): 742–45. <a href="https://doi.org/10.1093/biomet/asw026">https://doi.org/10.1093/biomet/asw026</a>.
-</div>
-</div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -729,18 +704,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -772,7 +736,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -780,7 +764,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
@@ -877,7 +861,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

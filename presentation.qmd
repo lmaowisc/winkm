@@ -1,6 +1,6 @@
 ---
 title: "`WinKM`: Approximating win-loss probabilities"
-subtitle: "Based on overall and event-free survival functions"
+subtitle: "Using overall and event-free survival functions"
 css: wr_style.css
 csl: apa.csl
 author:
@@ -8,7 +8,7 @@ author:
   affiliations: 
     - name: Department of Biostatistics & Medical Informatics
     - University of Wisconsin-Madison
-    - Draft: May 2025
+    - Visit https://lmaowisc.github.io/winKM
 format: 
   revealjs:
     theme: default
@@ -22,10 +22,10 @@ include-in-header:
       }
       </style>
 bibliography: references.bib
-# title-slide-attributes: 
-#   data-background-image: figs/OSU-PublicHealth-Horiz-RGBHEX.png
-#   data-background-size: 38%
-#   data-background-position: 5% 5%
+title-slide-attributes:
+  data-background-image: images/LiDA-IG.bmp
+  data-background-size: 15%
+  data-background-position: 5% 5%
 execute:
   eval: false
   echo: true
@@ -64,8 +64,6 @@ $$
     -   HF-ACTION trial
 -   **Conclusion**
 
-
-
 ## Introduction
 
 -   **Win-loss statistics**
@@ -89,31 +87,220 @@ $$
     -   $T_a$: Nonfatal event time
     -   $T_a^* = D_a\wedge T_a$: Event-free survival (EFS) time
     -   $a = 1$: treatment; 0: control
-
 -   **Summary functions**
-    -   **Joint survival** (likely unavailable): $H_a(t, s)=\pr(T_a>t, D_a> s)$  
-    -   **OS**: $S_a(t) =\pr(D_a > t)$
-    -   **EFS**: $S_a^*(t) =\pr(T_a^* > t)$
-
+    -   **Joint survival**: $H_a(t, s)=\pr(T_a>t, D_a> s)$ - likely unavailable
+    -   **OS**: $S_a(t) =\pr(D_a > t)$ - available through Kaplan-Meier (KM) curve
+    -   **EFS**: $S_a^*(t) =\pr(T_a^* > t)$ - available through KM curve
 
 ## Win-Loss Estimands
 
--  **Win-loss probabilities**
-\begin{align}\label{eq:win_def}
-    w_{a, 1-a}(\tau) &= \pr(\mbox{Group $a$ wins by time $\tau$})\notag\\
-    &=\pr\underbrace{(D_{1-a}<D_a\wedge \tau)}_{\mbox{Win on OS}} + 
-    \pr\underbrace{(D_1\wedge D_0 >\tau, T_{1-a}<T_a\wedge \tau)}_{\mbox{Tie on OS,
-    win on nonfatal}}\notag\\
-    &= \int_0^\tau S_a(t-)\d F_{1-a}(t)
-    +S_1(\tau)S_2(\tau) \notag\\
-    &\hspace{1em}\times \int_0^\tau \pr(T_a >t\mid D_a>\tau) \pr(t\leq T_{1-a} <t +\d t\mid D_{1-a}>\tau),
-\end{align}
+-   **Win-loss probabilities** [@oakes:2016]\begin{align}
+     w_{a, 1-a}(\tau) &= \pr(\mbox{Group $a$ wins by time $\tau$})\notag\\
+     &=\pr\underbrace{(D_{1-a}<D_a\wedge \tau)}_{\mbox{Win on OS}} + 
+     \pr\underbrace{(D_1\wedge D_0 >\tau, T_{1-a}<T_a\wedge \tau)}_{\mbox{Tie on OS,
+     win on nonfatal}}\notag\\
+     &= \int_0^\tau \color{blue}{S_a(t-)\d F_{1-a}(t)} 
+     \quad\quad\quad\quad \big(F_a(t) = 1 - S_a(t)\big)\\
+     &\hspace{1em}+\color{blue}{S_1(\tau)S_0(\tau)} \int_0^\tau \color{red}{\pr(T_a >t\mid D_a>\tau) \pr(t\leq T_{1-a} <t +\d t\mid D_{1-a}>\tau)}
+    \end{align}
+    -   **Win ratio**: $w_{1,0}(\tau)/w_{0,1}(\tau)$
+    -   **Win odds**: $w_{1,0}(\tau)/w_{0,1}(\tau)$
+    -   **Net benefit**: $w_{1,0}(\tau) - w_{0,1}(\tau)$
+
+## Survival-Conditional Event Rate
+
+-   **Second-term unknown** \begin{align}
+    &\int_0^\tau \color{red}{\pr(T_a >t\mid D_a>\tau) \pr(t\leq T_{1-a} <t +\d t\mid D_{1-a}>\tau)}\\
+    =& -\int_0^\tau \color{red}{H_a(t\mid \tau) H_{1-a}(\d t\mid \tau)}\\
+    =&\,\color{red}{\pr(T_{1-a}<T_a\wedge \tau\mid D_1 > \tau, D_0 >\tau)}
+    \end{align}
+    -   $H_a(t\mid \tau)=\pr(T_a>t\mid D_a>\tau)$: event-free probabilities in $\tau$-survivors
+    -   *Association* between death and nonfatal event
+    -   Approximate it using $S_a(t), S^*_a(t)$, and component-specific event counts
+
+## Approxmation - Idea
+
+-   **Start with** $t$-survivors \begin{align}
+    \d\Lambda_a(t\mid\tau) &:= \pr(t\le T_a < t + \d t\mid T_a\geq t, D_a>\color{red}{\tau})\\
+    &\leq \pr(t\le T_a < t + \d t\mid T_a\geq t, D_a\geq \color{red}{t})\\
+    &\approx \frac{N_a^{\rm E}}{N_a^*}\d\hat\Lambda_a^*(u)
+    \end{align}
+    -   Notation
+        -   $N_a^{\rm E}$: number of nonfatal events
+        -   $N_a^*$: number of composite (EFS) endpoints
+        -   $\hat\Lambda_a^*(t)=-\log \hat S_a^*(t)$: cumulative hazard of EFS
+    -   Inequality when *cross ratio* $\kappa(t, s)\geq 1$ (positive association)
+    -   Make up for bias by approximating $\kappa(t, s)$
+
+## Cross Ratio
+
+-   **Local dependence** [@oakes:1982; @oakes:1986] \begin{align*}\label{eq:cr:def}
+      \kappa_a(t, s) &=\frac{\pr(t\leq T_a< t +\d t\mid T_a\geq t,  D_a = s )}
+    {\pr(t\leq T_a< t +\d t\mid T_a\geq t, D_a \geq s)}  \notag\\
+    & = \frac{H_a(t, s)\partial^2 H_a(t, s)/(\partial t\partial s)}
+    {\{\partial H_a(t, s)/\partial t\}\{\partial H_a(t, s)/\partial s\}}.
+    \end{align*}
+    -   Relative change in nonfatal event risk at $t$ with death at $s$
+-   **Under Gumbel--Hougaard copula** [@oakes:1989] $$
+    \hat\kappa_a(t, s) \approx  1 + (\hat\theta_a - 1)\hat\Lambda_a^*(s)^{-1}
+    $$
+    -   $\hat\theta$: estimated association parameter
+
+## Association Parameter
+
+-   **Estimating association parameter** [@mao:2022] $$
+    \hat\theta_a = \frac{\log(1-\hat r_a^{\rm E}/\hat r_a^*)}{\log(\hat r_a^{\rm D}/\hat r_a^*)}\vee 1
+    $$
+    -   $\hat r_a^{\rm E}=N_a^{\rm D}/L_a^{\rm OS}$: nonfatal event rate
+    -   $\hat r_a^{\rm D}= N_a^{\rm E}/L_a^*$: death rate
+    -   $\hat r_a^*= N^*/L_a^*$: composite event rate
+    -   $L_a^{\rm OS}$: total person-time at risk for OS
+    -   $L_a^*$: total person-time at risk for EFS
+
+## Approxmation - Formula
+
+-   **Formula** $$
+    H_a(t\mid\tau) \approx \prod_{0\leq u \leq t}\left(1 - \frac{N_a^{\rm E}}{N_a^*}\d\hat\Lambda_a^*(u)\underbrace{\prod_{u\leq s \leq \tau}
+       \left[1 - \{\hat\kappa_a(u, s)-1\}\frac{\d\hat F_a(s)}{\hat S_a(s)}\right]}_{\text{Bias correction for $\tau$-survivorship}}\right)
+    $$
+
+-   **Summary data needed**
+
+    -   $\hat S_a(t)$, $\hat S_a^*(t)$: scan KM curves for OS and EFS ([WebPlotDigitizer](https://automeris.io/))
+    -   $N_a^{\rm E}$, $N_a^{\rm D}$, $N_a^*$: event counts reported in paper or CONSORT diagram
+    -   $L_a^{\rm OS}$, $L_a^*$: total follow-up times calculated from risk table
+
+## `WinKM` Workflow
+
+-   A **step-by-step** approach
+    -   `prepare_km_data()`: read and clean digitized KM data
+    -   `merge_endpoints()`: align OS and PFS on a common time grid
+    -   `compute_increments()`: calculate $\d\hat S_a(t)$ and $\d\hat S^*_a(t)$
+    -   `compute_followup()`: derive total follow-up times from at-risk tables
+    -   `compute_theta()`: compute association parameters ($\theta_a$)
+    -   `compute_win_loss()`: calculate final win/loss probabilities
+-   An **all-in-one** approach using `run_win_loss_workflow()`
+-   Visit [package website](https://lmaowisc.github.io/winKM/) for details
+
+# Case Studies
+
+## Colon Cancer Trial
+
+\subsection{A colon cancer trial}
+
+<!-- A landmark colon cancer trial reported by \cite{moertel:1990} evaluated the efficacy of levamisole and fluorouracil in 929 patients with stage C disease. -->
+
+<!-- We consider a subset comparing the combined treatment (Lev+5FU; 304 patients) and the control (314 patients) on the hierarchical outcomes of death and relapse of cancer (nonfatal event). -->
+
+<!-- To start, we generate the Kaplan--Meier (KM) curves for overall survival (OS) and  -->
+
+<!-- relapse-free survival (RFS), as shown in Section~S3.1 of the supplementary material.  -->
+
+<!-- Next, we use WebPlotDigitizer (\url{https://automeris.io/}), a free online plot-digitizing tool,  -->
+
+<!-- to extract the estimates $\hat{S}_a(t)$ and $\hat{S}_a^*(t)$ from the graphs.  -->
+
+<!-- These estimates are then used to reconstruct the KM curves in the left panel of Figure~\ref{fig:colon_recon_km}, with total event counts and person-years of follow-up  -->
+
+<!-- obtained from the at-risk tables. The information in this panel forms the basis for -->
+
+<!--  computing the win-loss probabilities. -->
+
+<!-- The results are illustrated on the right panel. -->
+
+<!-- The area plots show the estimates of $w_{1,0}(\tau)$ and $w_{0,1}(\tau)$ based on the -->
+
+<!-- $\kappa$-adjusted approach of \eqref{eq:approx_spec}, where the darker color -->
+
+<!-- represents win-loss determined on death and the lighter one represents win-loss -->
+
+<!-- on relapse. {\red These estimates align remarkably well with the raw data-based -->
+
+<!-- IPCW approach. On the other hand, the unadjusted lower bound in -->
+
+<!-- \eqref{eq:np_bounds} leads to considerable overestimation of both win -->
+
+<!-- and loss probabilities (due to overestimation of the risk of relapse).}  -->
+
+<!-- The 1-, 2-, 4-, and 7-year win ratios by the adjusted approximation (IPCW) -->
+
+<!-- are 1.71 (1.65), 1.47 (1.47), 1.53 (1.51), and 1.48 (1.51), respectively. -->
+
+-   **Stage C disease** [@moertel:1990]
+    -   Combined treatment (Lev+5FU; $n=304$) vs control ($n=314$ patients)
+-   **KM curves** for OS and relapse-free survival (RFS)
+    -   Extract estimates $\hat{S}_a(t)$ and $\hat{S}_a^*(t)$ from graphs using [WebPlotDigitizer](https://automeris.io/)
+    -   Total event counts and person-years of follow-up from paper
+-   **Compare estimates of** $w_{1,0}(\tau)$ and $w_{0,1}(\tau)$
+    -   Adjusting for association between death and relapse (area plot)
+    -   KM naive: without adjustment
+    -   IPCW (reference): raw data-based estimates [@dong:2020; @parner:2024]
+
+## Colon Cancer Trial: Results
+
+-   **Left**: summary data; **right**: approximation results
+    -   1-, 2-, 4-, and 7-year win ratios by the adjusted method (comparing with IPCW): 1.71 (1.65), 1.47 (1.47), 1.53 (1.51), and 1.48 (1.51), respectively
+
+![](images/colon_recon_km.png){fig-align="center" width="75%"}
+
+## HF-ACTION Trial
+
+<!-- Over two thousand heart failure patients from North America and France participated in the Heart Failure: A Controlled Trial Investigating Outcomes of Exercise Training (HF-ACTION) between 2003 and 2007 \citep{oconner:2009}. The primary goal was to evaluate the effect of adding exercise training to usual care  on the composite endpoint of all-cause death or hospitalization (nonfatal event). We focus on a subgroup of 426 non-ischemic patients whose baseline cardiopulmonary exercise test lasted nine minutes or less. -->
+
+<!-- We follow the same procedures as described in the previous example. -->
+
+<!-- The raw data-based KM curves for OS and hospitalization-free survival (HFS) -->
+
+<!-- are plotted in Section~S3.2 of the supplementary material. -->
+
+<!-- The left panel of Figure~ shows the reconstructed curves along with summary data; -->
+
+<!-- the right panel shows the corresponding win-loss estimates, -->
+
+<!-- compared against the IPCW. -->
+
+<!-- The 1-, 2-, 3-, and 4-year win ratios by the adjusted approximation (IPCW) -->
+
+<!-- are 1.27 (1.23), 1.27 (1.29), 1.21 (1.21), and 1.21 (1.26), respectively. -->
+
+-   **Study background** [@oconner:2009]
+    -   2,000+ heart failure patients from North America and France
+    -   Non-ischemic patients with baseline cardiopulmonary exercise test lasting 9 minutes or less (426 patients)
+    -   Exercise training ($n=205$) vs usual care ($n=221$)
+-   **KM curves** for OS and hospitalization-free survival (HFS)
+    -   Extract estimates $\hat{S}_a(t)$ and $\hat{S}_a^*(t)$ from graphs using [WebPlotDigitizer](https://automeris.io/)
+    -   Total event counts and person-years of follow-up from paper
+
+## HF-ACTION Trial: Results
+
+-   **Left**: summary data; **right**: approximation results
+    -   1-, 2-, 3-, and 4-year win ratios by the adjusted method (comparing with IPCW): 1.27 (1.23), 1.27 (1.29), 1.21 (1.21), and 1.21 (1.26), respectively
+
+![](images/hf_action_recon_km.png){fig-align="center" width="75%"}
+
+# Conclusion
+
+## Additional Resources
+
+-   **Manuscript**
+
+    >  Mao, L. (2025+) Approximating Win-Loss Probabilities Based on the Overall and Event-Free Survival Functions. Available at [http://dx.doi.org/10.2139/ssrn.5142445 ](https://dx.doi.org/10.2139/ssrn.5142445) 		 	
 
 
-# Case studies
+-   **`WinKM` Website**
+
+    >  Calculating win-loss statistics using summary data: [https://lmaowisc.github.io/winKM/](https://lmaowisc.github.io/winKM/)
 
 
+## Summary and Future Work
 
+-   **`WinKM`**: approximating win-loss measures using published OS and EFS data
+    -   Scanned KM curves
+    -   Event counts (deaths, EFS endpoints, nonfatal events)
+    -   Total follow-up times (from risk tables)
+-   **Adding standard errors**
+    -   Optimal combination of study-specific effect sizes
+    -   Assessment of between-study heterogeneity
 
 ## References
 

@@ -152,9 +152,9 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="quarto-title-block center">
+<section id="title-slide" data-background-image="images/LiDA-IG.bmp" data-background-position="5% 5%" data-background-size="15%" class="quarto-title-block center">
   <h1 class="title"><code>WinKM</code>: Approximating win-loss probabilities</h1>
-  <p class="subtitle">Based on overall and event-free survival functions</p>
+  <p class="subtitle">Using overall and event-free survival functions</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -168,7 +168,7 @@ Lu Mao
             University of Wisconsin-Madison
           </p>
         <p class="quarto-title-affiliation">
-            
+            Visit https://lmaowisc.github.io/winKM
           </p>
     </div>
 </div>
@@ -253,31 +253,262 @@ Lu Mao
 </ul></li>
 <li><strong>Summary functions</strong>
 <ul>
-<li><strong>Joint survival</strong> (likely unavailable): <span class="math inline">\(H_a(t, s)=\pr(T_a&gt;t, D_a&gt; s)\)</span><br>
-</li>
-<li><strong>OS</strong>: <span class="math inline">\(S_a(t) =\pr(D_a &gt; t)\)</span></li>
-<li><strong>EFS</strong>: <span class="math inline">\(S_a^*(t) =\pr(T_a^* &gt; t)\)</span></li>
+<li><strong>Joint survival</strong>: <span class="math inline">\(H_a(t, s)=\pr(T_a&gt;t, D_a&gt; s)\)</span> - likely unavailable</li>
+<li><strong>OS</strong>: <span class="math inline">\(S_a(t) =\pr(D_a &gt; t)\)</span> - available through Kaplan-Meier (KM) curve</li>
+<li><strong>EFS</strong>: <span class="math inline">\(S_a^*(t) =\pr(T_a^* &gt; t)\)</span> - available through KM curve</li>
 </ul></li>
 </ul>
 </section>
 <section id="win-loss-estimands" class="slide level2">
 <h2>Win-Loss Estimands</h2>
 <ul>
-<li><strong>Win-loss probabilities</strong> <span class="math display">\[\begin{align}\label{eq:win_def}
+<li><strong>Win-loss probabilities</strong> <span class="citation" data-cites="oakes:2016">(<a href="#/references" role="doc-biblioref" onclick="">Oakes, 2016</a>)</span><span class="math display">\[\begin{align}
 w_{a, 1-a}(\tau) &amp;= \pr(\mbox{Group $a$ wins by time $\tau$})\notag\\
 &amp;=\pr\underbrace{(D_{1-a}&lt;D_a\wedge \tau)}_{\mbox{Win on OS}} +
 \pr\underbrace{(D_1\wedge D_0 &gt;\tau, T_{1-a}&lt;T_a\wedge \tau)}_{\mbox{Tie on OS,
 win on nonfatal}}\notag\\
-&amp;= \int_0^\tau S_a(t-)\d F_{1-a}(t)
-+S_1(\tau)S_2(\tau) \notag\\
-&amp;\hspace{1em}\times \int_0^\tau \pr(T_a &gt;t\mid D_a&gt;\tau) \pr(t\leq T_{1-a} &lt;t +\d t\mid D_{1-a}&gt;\tau),
-\end{align}\]</span></li>
+&amp;= \int_0^\tau \color{blue}{S_a(t-)\d F_{1-a}(t)}
+\quad\quad\quad\quad \big(F_a(t) = 1 - S_a(t)\big)\\
+&amp;\hspace{1em}+\color{blue}{S_1(\tau)S_0(\tau)} \int_0^\tau \color{red}{\pr(T_a &gt;t\mid D_a&gt;\tau) \pr(t\leq T_{1-a} &lt;t +\d t\mid D_{1-a}&gt;\tau)}
+\end{align}\]</span>
+<ul>
+<li><strong>Win ratio</strong>: <span class="math inline">\(w_{1,0}(\tau)/w_{0,1}(\tau)\)</span></li>
+<li><strong>Win odds</strong>: <span class="math inline">\(w_{1,0}(\tau)/w_{0,1}(\tau)\)</span></li>
+<li><strong>Net benefit</strong>: <span class="math inline">\(w_{1,0}(\tau) - w_{0,1}(\tau)\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="survival-conditional-event-rate" class="slide level2">
+<h2>Survival-Conditional Event Rate</h2>
+<ul>
+<li><strong>Second-term unknown</strong> <span class="math display">\[\begin{align}
+&amp;\int_0^\tau \color{red}{\pr(T_a &gt;t\mid D_a&gt;\tau) \pr(t\leq T_{1-a} &lt;t +\d t\mid D_{1-a}&gt;\tau)}\\
+=&amp; -\int_0^\tau \color{red}{H_a(t\mid \tau) H_{1-a}(\d t\mid \tau)}\\
+=&amp;\,\color{red}{\pr(T_{1-a}&lt;T_a\wedge \tau\mid D_1 &gt; \tau, D_0 &gt;\tau)}
+\end{align}\]</span>
+<ul>
+<li><span class="math inline">\(H_a(t\mid \tau)=\pr(T_a&gt;t\mid D_a&gt;\tau)\)</span>: event-free probabilities in <span class="math inline">\(\tau\)</span>-survivors</li>
+<li><em>Association</em> between death and nonfatal event</li>
+<li>Approximate it using <span class="math inline">\(S_a(t), S^*_a(t)\)</span>, and component-specific event counts</li>
+</ul></li>
+</ul>
+</section>
+<section id="approxmation---idea" class="slide level2">
+<h2>Approxmation - Idea</h2>
+<ul>
+<li><strong>Start with</strong> <span class="math inline">\(t\)</span>-survivors <span class="math display">\[\begin{align}
+\d\Lambda_a(t\mid\tau) &amp;:= \pr(t\le T_a &lt; t + \d t\mid T_a\geq t, D_a&gt;\color{red}{\tau})\\
+&amp;\leq \pr(t\le T_a &lt; t + \d t\mid T_a\geq t, D_a\geq \color{red}{t})\\
+&amp;\approx \frac{N_a^{\rm E}}{N_a^*}\d\hat\Lambda_a^*(u)
+\end{align}\]</span>
+<ul>
+<li>Notation
+<ul>
+<li><span class="math inline">\(N_a^{\rm E}\)</span>: number of nonfatal events</li>
+<li><span class="math inline">\(N_a^*\)</span>: number of composite (EFS) endpoints</li>
+<li><span class="math inline">\(\hat\Lambda_a^*(t)=-\log \hat S_a^*(t)\)</span>: cumulative hazard of EFS</li>
+</ul></li>
+<li>Inequality when <em>cross ratio</em> <span class="math inline">\(\kappa(t, s)\geq 1\)</span> (positive association)</li>
+<li>Make up for bias by approximating <span class="math inline">\(\kappa(t, s)\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="cross-ratio" class="slide level2">
+<h2>Cross Ratio</h2>
+<ul>
+<li><strong>Local dependence</strong> <span class="citation" data-cites="oakes:1982 oakes:1986">(<a href="#/references" role="doc-biblioref" onclick="">Oakes, 1982</a>, <a href="#/references" role="doc-biblioref" onclick="">1986</a>)</span> <span class="math display">\[\begin{align*}\label{eq:cr:def}
+  \kappa_a(t, s) &amp;=\frac{\pr(t\leq T_a&lt; t +\d t\mid T_a\geq t,  D_a = s )}
+{\pr(t\leq T_a&lt; t +\d t\mid T_a\geq t, D_a \geq s)}  \notag\\
+&amp; = \frac{H_a(t, s)\partial^2 H_a(t, s)/(\partial t\partial s)}
+{\{\partial H_a(t, s)/\partial t\}\{\partial H_a(t, s)/\partial s\}}.
+\end{align*}\]</span>
+<ul>
+<li>Relative change in nonfatal event risk at <span class="math inline">\(t\)</span> with death at <span class="math inline">\(s\)</span></li>
+</ul></li>
+<li><strong>Under Gumbel–Hougaard copula</strong> <span class="citation" data-cites="oakes:1989">(<a href="#/references" role="doc-biblioref" onclick="">Oakes, 1989</a>)</span> <span class="math display">\[
+\hat\kappa_a(t, s) \approx  1 + (\hat\theta_a - 1)\hat\Lambda_a^*(s)^{-1}
+\]</span>
+<ul>
+<li><span class="math inline">\(\hat\theta\)</span>: estimated association parameter</li>
+</ul></li>
+</ul>
+</section>
+<section id="association-parameter" class="slide level2">
+<h2>Association Parameter</h2>
+<ul>
+<li><strong>Estimating association parameter</strong> <span class="citation" data-cites="mao:2022">(<a href="#/references" role="doc-biblioref" onclick="">Mao et al., 2022</a>)</span> <span class="math display">\[
+\hat\theta_a = \frac{\log(1-\hat r_a^{\rm E}/\hat r_a^*)}{\log(\hat r_a^{\rm D}/\hat r_a^*)}\vee 1
+\]</span>
+<ul>
+<li><span class="math inline">\(\hat r_a^{\rm E}=N_a^{\rm D}/L_a^{\rm OS}\)</span>: nonfatal event rate</li>
+<li><span class="math inline">\(\hat r_a^{\rm D}= N_a^{\rm E}/L_a^*\)</span>: death rate</li>
+<li><span class="math inline">\(\hat r_a^*= N^*/L_a^*\)</span>: composite event rate</li>
+<li><span class="math inline">\(L_a^{\rm OS}\)</span>: total person-time at risk for OS</li>
+<li><span class="math inline">\(L_a^*\)</span>: total person-time at risk for EFS</li>
+</ul></li>
+</ul>
+</section>
+<section id="approxmation---formula" class="slide level2">
+<h2>Approxmation - Formula</h2>
+<ul>
+<li><p><strong>Formula</strong> <span class="math display">\[
+H_a(t\mid\tau) \approx \prod_{0\leq u \leq t}\left(1 - \frac{N_a^{\rm E}}{N_a^*}\d\hat\Lambda_a^*(u)\underbrace{\prod_{u\leq s \leq \tau}
+   \left[1 - \{\hat\kappa_a(u, s)-1\}\frac{\d\hat F_a(s)}{\hat S_a(s)}\right]}_{\text{Bias correction for $\tau$-survivorship}}\right)
+\]</span></p></li>
+<li><p><strong>Summary data needed</strong></p>
+<ul>
+<li><span class="math inline">\(\hat S_a(t)\)</span>, <span class="math inline">\(\hat S_a^*(t)\)</span>: scan KM curves for OS and EFS (<a href="https://automeris.io/">WebPlotDigitizer</a>)</li>
+<li><span class="math inline">\(N_a^{\rm E}\)</span>, <span class="math inline">\(N_a^{\rm D}\)</span>, <span class="math inline">\(N_a^*\)</span>: event counts reported in paper or CONSORT diagram</li>
+<li><span class="math inline">\(L_a^{\rm OS}\)</span>, <span class="math inline">\(L_a^*\)</span>: total follow-up times calculated from risk table</li>
+</ul></li>
+</ul>
+</section>
+<section id="winkm-workflow" class="slide level2">
+<h2><code>WinKM</code> Workflow</h2>
+<ul>
+<li>A <strong>step-by-step</strong> approach
+<ul>
+<li><code>prepare_km_data()</code>: read and clean digitized KM data</li>
+<li><code>merge_endpoints()</code>: align OS and PFS on a common time grid</li>
+<li><code>compute_increments()</code>: calculate <span class="math inline">\(\d\hat S_a(t)\)</span> and <span class="math inline">\(\d\hat S^*_a(t)\)</span></li>
+<li><code>compute_followup()</code>: derive total follow-up times from at-risk tables</li>
+<li><code>compute_theta()</code>: compute association parameters (<span class="math inline">\(\theta_a\)</span>)</li>
+<li><code>compute_win_loss()</code>: calculate final win/loss probabilities</li>
+</ul></li>
+<li>An <strong>all-in-one</strong> approach using <code>run_win_loss_workflow()</code></li>
+<li>Visit <a href="https://lmaowisc.github.io/winKM/">package website</a> for details</li>
 </ul>
 </section></section>
 <section>
 <section id="case-studies" class="title-slide slide level1 center">
-<h1>Case studies</h1>
+<h1>Case Studies</h1>
 
+</section>
+<section id="colon-cancer-trial" class="slide level2">
+<h2>Colon Cancer Trial</h2>
+<!-- A landmark colon cancer trial reported by \cite{moertel:1990} evaluated the efficacy of levamisole and fluorouracil in 929 patients with stage C disease. -->
+<!-- We consider a subset comparing the combined treatment (Lev+5FU; 304 patients) and the control (314 patients) on the hierarchical outcomes of death and relapse of cancer (nonfatal event). -->
+<!-- To start, we generate the Kaplan--Meier (KM) curves for overall survival (OS) and  -->
+<!-- relapse-free survival (RFS), as shown in Section~S3.1 of the supplementary material.  -->
+<!-- Next, we use WebPlotDigitizer (\url{https://automeris.io/}), a free online plot-digitizing tool,  -->
+<!-- to extract the estimates $\hat{S}_a(t)$ and $\hat{S}_a^*(t)$ from the graphs.  -->
+<!-- These estimates are then used to reconstruct the KM curves in the left panel of Figure~\ref{fig:colon_recon_km}, with total event counts and person-years of follow-up  -->
+<!-- obtained from the at-risk tables. The information in this panel forms the basis for -->
+<!--  computing the win-loss probabilities. -->
+<!-- The results are illustrated on the right panel. -->
+<!-- The area plots show the estimates of $w_{1,0}(\tau)$ and $w_{0,1}(\tau)$ based on the -->
+<!-- $\kappa$-adjusted approach of \eqref{eq:approx_spec}, where the darker color -->
+<!-- represents win-loss determined on death and the lighter one represents win-loss -->
+<!-- on relapse. {\red These estimates align remarkably well with the raw data-based -->
+<!-- IPCW approach. On the other hand, the unadjusted lower bound in -->
+<!-- \eqref{eq:np_bounds} leads to considerable overestimation of both win -->
+<!-- and loss probabilities (due to overestimation of the risk of relapse).}  -->
+<!-- The 1-, 2-, 4-, and 7-year win ratios by the adjusted approximation (IPCW) -->
+<!-- are 1.71 (1.65), 1.47 (1.47), 1.53 (1.51), and 1.48 (1.51), respectively. -->
+<ul>
+<li><strong>Stage C disease</strong> <span class="citation" data-cites="moertel:1990">(<a href="#/references" role="doc-biblioref" onclick="">Moertel et al., 1990</a>)</span>
+<ul>
+<li>Combined treatment (Lev+5FU; <span class="math inline">\(n=304\)</span>) vs control (<span class="math inline">\(n=314\)</span> patients)</li>
+</ul></li>
+<li><strong>KM curves</strong> for OS and relapse-free survival (RFS)
+<ul>
+<li>Extract estimates <span class="math inline">\(\hat{S}_a(t)\)</span> and <span class="math inline">\(\hat{S}_a^*(t)\)</span> from graphs using <a href="https://automeris.io/">WebPlotDigitizer</a></li>
+<li>Total event counts and person-years of follow-up from paper</li>
+</ul></li>
+<li><strong>Compare estimates of</strong> <span class="math inline">\(w_{1,0}(\tau)\)</span> and <span class="math inline">\(w_{0,1}(\tau)\)</span>
+<ul>
+<li>Adjusting for association between death and relapse (area plot)</li>
+<li>KM naive: without adjustment</li>
+<li>IPCW (reference): raw data-based estimates <span class="citation" data-cites="dong:2020 parner:2024">(<a href="#/references" role="doc-biblioref" onclick="">Dong et al., 2020</a>; <a href="#/references" role="doc-biblioref" onclick="">Parner &amp; Overgaard, 2024</a>)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="colon-cancer-trial-results" class="slide level2">
+<h2>Colon Cancer Trial: Results</h2>
+<ul>
+<li><strong>Left</strong>: summary data; <strong>right</strong>: approximation results
+<ul>
+<li>1-, 2-, 4-, and 7-year win ratios by the adjusted method (comparing with IPCW): 1.71 (1.65), 1.47 (1.47), 1.53 (1.51), and 1.48 (1.51), respectively</li>
+</ul></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/colon_recon_km.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
+</figure>
+</div>
+</section>
+<section id="hf-action-trial" class="slide level2">
+<h2>HF-ACTION Trial</h2>
+<!-- Over two thousand heart failure patients from North America and France participated in the Heart Failure: A Controlled Trial Investigating Outcomes of Exercise Training (HF-ACTION) between 2003 and 2007 \citep{oconner:2009}. The primary goal was to evaluate the effect of adding exercise training to usual care  on the composite endpoint of all-cause death or hospitalization (nonfatal event). We focus on a subgroup of 426 non-ischemic patients whose baseline cardiopulmonary exercise test lasted nine minutes or less. -->
+<!-- We follow the same procedures as described in the previous example. -->
+<!-- The raw data-based KM curves for OS and hospitalization-free survival (HFS) -->
+<!-- are plotted in Section~S3.2 of the supplementary material. -->
+<!-- The left panel of Figure~ shows the reconstructed curves along with summary data; -->
+<!-- the right panel shows the corresponding win-loss estimates, -->
+<!-- compared against the IPCW. -->
+<!-- The 1-, 2-, 3-, and 4-year win ratios by the adjusted approximation (IPCW) -->
+<!-- are 1.27 (1.23), 1.27 (1.29), 1.21 (1.21), and 1.21 (1.26), respectively. -->
+<ul>
+<li><strong>Study background</strong> <span class="citation" data-cites="oconner:2009">(<a href="#/references" role="doc-biblioref" onclick="">O’Connor et al., 2009</a>)</span>
+<ul>
+<li>2,000+ heart failure patients from North America and France</li>
+<li>Non-ischemic patients with baseline cardiopulmonary exercise test lasting 9 minutes or less (426 patients)</li>
+<li>Exercise training (<span class="math inline">\(n=205\)</span>) vs usual care (<span class="math inline">\(n=221\)</span>)</li>
+</ul></li>
+<li><strong>KM curves</strong> for OS and hospitalization-free survival (HFS)
+<ul>
+<li>Extract estimates <span class="math inline">\(\hat{S}_a(t)\)</span> and <span class="math inline">\(\hat{S}_a^*(t)\)</span> from graphs using <a href="https://automeris.io/">WebPlotDigitizer</a></li>
+<li>Total event counts and person-years of follow-up from paper</li>
+</ul></li>
+</ul>
+</section>
+<section id="hf-action-trial-results" class="slide level2">
+<h2>HF-ACTION Trial: Results</h2>
+<ul>
+<li><strong>Left</strong>: summary data; <strong>right</strong>: approximation results
+<ul>
+<li>1-, 2-, 3-, and 4-year win ratios by the adjusted method (comparing with IPCW): 1.27 (1.23), 1.27 (1.29), 1.21 (1.21), and 1.21 (1.26), respectively</li>
+</ul></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/hf_action_recon_km.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
+</figure>
+</div>
+</section></section>
+<section>
+<section id="conclusion" class="title-slide slide level1 center">
+<h1>Conclusion</h1>
+
+</section>
+<section id="additional-resources" class="slide level2">
+<h2>Additional Resources</h2>
+<ul>
+<li><p><strong>Manuscript</strong></p>
+<blockquote>
+<p>Mao, L. (2025+) Approximating Win-Loss Probabilities Based on the Overall and Event-Free Survival Functions. Available at <a href="https://dx.doi.org/10.2139/ssrn.5142445">http://dx.doi.org/10.2139/ssrn.5142445</a></p>
+</blockquote></li>
+<li><p><strong><code>WinKM</code> Website</strong></p>
+<blockquote>
+<p>Calculating win-loss statistics using summary data: <a href="https://lmaowisc.github.io/winKM/">https://lmaowisc.github.io/winKM/</a></p>
+</blockquote></li>
+</ul>
+</section>
+<section id="summary-and-future-work" class="slide level2">
+<h2>Summary and Future Work</h2>
+<ul>
+<li><strong><code>WinKM</code></strong>: approximating win-loss measures using published OS and EFS data
+<ul>
+<li>Scanned KM curves</li>
+<li>Event counts (deaths, EFS endpoints, nonfatal events)</li>
+<li>Total follow-up times (from risk tables)</li>
+</ul></li>
+<li><strong>Adding standard errors</strong>
+<ul>
+<li>Optimal combination of study-specific effect sizes</li>
+<li>Assessment of between-study heterogeneity</li>
+</ul></li>
+</ul>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
@@ -290,6 +521,33 @@ Buyse, M. (2010). Generalized pairwise comparisons of prioritized outcomes in th
 </div>
 <div id="ref-buyse:2025" class="csl-entry" role="listitem">
 Buyse, M., Verbeeck, J., Saad, E. D., Backer, M. D., Deltuvaite-Thomas, V., &amp; Molenberghs, G. (2025). <em>Handbook of Generalized Pairwise Comparisons</em>. Chapman; Hall/CRC. <a href="https://doi.org/10.1201/9781003390855">https://doi.org/10.1201/9781003390855</a>
+</div>
+<div id="ref-dong:2020" class="csl-entry" role="listitem">
+Dong, G., Mao, L., Huang, B., Gamalo-Siebers, M., Wang, J., Yu, G., &amp; Hoaglin, D. C. (2020). The inverse-probability-of-censoring weighting (IPCW) adjusted win ratio statistic: An unbiased estimator in the presence of independent censoring. <em>Journal of Biopharmaceutical Statistics</em>, <em>30</em>(5), 882–899.
+</div>
+<div id="ref-mao:2022" class="csl-entry" role="listitem">
+Mao, L., Kim, K., &amp; Miao, X. (2022). Sample size formula for general win ratio analysis. <em>Biometrics</em>, <em>78</em>(3), 1257–1268.
+</div>
+<div id="ref-moertel:1990" class="csl-entry" role="listitem">
+Moertel, C. G., Fleming, T. R., Macdonald, J. S., Haller, D. G., Laurie, J. A., Goodman, P. J., Ungerleider, J. S., Emerson, W. A., Tormey, D. C., Glick, J. H., et al. (1990). Levamisole and fluorouracil for adjuvant therapy of resected colon carcinoma. <em>New England Journal of Medicine</em>, <em>322</em>(6), 352–358.
+</div>
+<div id="ref-oconner:2009" class="csl-entry" role="listitem">
+O’Connor, C. M., Whellan, D. J., Lee, K. L., Keteyian, S. J., Cooper, L. S., Ellis, S. J., Leifer, E. S., Kraus, W. E., Kitzman, D. W., Blumenthal, J. A., et al. (2009). Efficacy and safety of exercise training in patients with chronic heart failure: HF-ACTION randomized controlled trial. <em>JAMA</em>, <em>301</em>(14), 1439–1450.
+</div>
+<div id="ref-oakes:1982" class="csl-entry" role="listitem">
+Oakes, D. (1982). A model for association in bivariate survival data. <em>Journal of the Royal Statistical Society Series B: Statistical Methodology</em>, <em>44</em>(3), 414–422.
+</div>
+<div id="ref-oakes:1986" class="csl-entry" role="listitem">
+Oakes, D. (1986). Semiparametric inference in a model for association in bivariate survival data. <em>Biometrika</em>, <em>73</em>(2), 353–361.
+</div>
+<div id="ref-oakes:1989" class="csl-entry" role="listitem">
+Oakes, D. (1989). Bivariate survival models induced by frailties. <em>Journal of the American Statistical Association</em>, <em>84</em>(406), 487–493.
+</div>
+<div id="ref-oakes:2016" class="csl-entry" role="listitem">
+Oakes, D. (2016). On the win-ratio statistic in clinical trials with multiple types of event. <em>Biometrika</em>, <em>103</em>(3), 742–745.
+</div>
+<div id="ref-parner:2024" class="csl-entry" role="listitem">
+Parner, E. T., &amp; Overgaard, M. (2024). Estimation of win, loss probabilities, and win ratio based on right-censored event data. <em>Scandinavian Journal of Statistics</em>, <em>52</em>(1), 170–184.
 </div>
 <div id="ref-pocock:2012" class="csl-entry" role="listitem">
 Pocock, S. J., Ariti, C. A., Collier, T. J., &amp; Wang, D. (2012). The win ratio: a new approach to the analysis of composite endpoints in clinical trials based on clinical priorities. <em>European Heart Journal</em>, <em>33</em>(2), 176–182. <a href="https://doi.org/10.1093/eurheartj/ehr352">https://doi.org/10.1093/eurheartj/ehr352</a>
