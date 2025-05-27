@@ -276,7 +276,7 @@ $$
 
 -   **`WinKM` Website**
 
-    >  Calculating win-loss statistics using summary data: [https://lmaowisc.github.io/winKM/](https://lmaowisc.github.io/winKM/)
+    >  Calculating win-loss statistics using summary data: [https://lmaowisc.github.io/winkm/](https://lmaowisc.github.io/winkm/)
 
 
 ## Summary and Future Work

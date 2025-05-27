@@ -179,7 +179,7 @@
     "href": "presentation.html#additional-resources",
     "title": "WinKM: Approximating win-loss probabilities",
     "section": "Additional Resources",
-    "text": "Additional Resources\n\nManuscript\n\nMao, L. (2025+) Approximating Win-Loss Probabilities Based on the Overall and Event-Free Survival Functions. Available at http://dx.doi.org/10.2139/ssrn.5142445\n\nWinKM Website\n\nCalculating win-loss statistics using summary data: https://lmaowisc.github.io/winKM/"
+    "text": "Additional Resources\n\nManuscript\n\nMao, L. (2025+) Approximating Win-Loss Probabilities Based on the Overall and Event-Free Survival Functions. Available at http://dx.doi.org/10.2139/ssrn.5142445\n\nWinKM Website\n\nCalculating win-loss statistics using summary data: https://lmaowisc.github.io/winkm/"
   },
   {
     "objectID": "presentation.html#summary-and-future-work",
