@@ -138,8 +138,8 @@ $$
 -   **Estimating association parameter** [@mao:2022] $$
     \hat\theta_a = \frac{\log(1-\hat r_a^{\rm E}/\hat r_a^*)}{\log(\hat r_a^{\rm D}/\hat r_a^*)}\vee 1
     $$
-    -   $\hat r_a^{\rm E}=N_a^{\rm D}/L_a^{\rm OS}$: nonfatal event rate
-    -   $\hat r_a^{\rm D}= N_a^{\rm E}/L_a^*$: death rate
+    -   $\hat r_a^{\rm E}=N_a^{\rm E}/L_a^*$: nonfatal event rate
+    -   $\hat r_a^{\rm D}= N_a^{\rm D}/L_a^{\rm OS}$: death rate
     -   $\hat r_a^*= N^*/L_a^*$: composite event rate
     -   $L_a^{\rm OS}$: total person-time at risk for OS
     -   $L_a^*$: total person-time at risk for EFS
@@ -271,13 +271,11 @@ $$
 
 -   **Manuscript**
 
-    >  Mao, L. (2025+) Approximating Win-Loss Probabilities Based on the Overall and Event-Free Survival Functions. Available at [http://dx.doi.org/10.2139/ssrn.5142445 ](https://dx.doi.org/10.2139/ssrn.5142445) 		 	
-
+    > Mao, L. (2025+) Approximating Win-Loss Probabilities Based on the Overall and Event-Free Survival Functions. Available at [http://dx.doi.org/10.2139/ssrn.5142445](https://dx.doi.org/10.2139/ssrn.5142445)
 
 -   **`WinKM` Website**
 
-    >  Calculating win-loss statistics using summary data: [https://lmaowisc.github.io/winkm/](https://lmaowisc.github.io/winkm/)
-
+    > Calculating win-loss statistics using summary data: <https://lmaowisc.github.io/winkm/>
 
 ## Summary and Future Work
 

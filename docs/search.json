@@ -130,7 +130,7 @@
     "href": "presentation.html#association-parameter",
     "title": "WinKM: Approximating win-loss probabilities",
     "section": "Association Parameter",
-    "text": "Association Parameter\n\nEstimating association parameter (Mao et al., 2022) \\[\n\\hat\\theta_a = \\frac{\\log(1-\\hat r_a^{\\rm E}/\\hat r_a^*)}{\\log(\\hat r_a^{\\rm D}/\\hat r_a^*)}\\vee 1\n\\]\n\n\\(\\hat r_a^{\\rm E}=N_a^{\\rm D}/L_a^{\\rm OS}\\): nonfatal event rate\n\\(\\hat r_a^{\\rm D}= N_a^{\\rm E}/L_a^*\\): death rate\n\\(\\hat r_a^*= N^*/L_a^*\\): composite event rate\n\\(L_a^{\\rm OS}\\): total person-time at risk for OS\n\\(L_a^*\\): total person-time at risk for EFS"
+    "text": "Association Parameter\n\nEstimating association parameter (Mao et al., 2022) \\[\n\\hat\\theta_a = \\frac{\\log(1-\\hat r_a^{\\rm E}/\\hat r_a^*)}{\\log(\\hat r_a^{\\rm D}/\\hat r_a^*)}\\vee 1\n\\]\n\n\\(\\hat r_a^{\\rm E}=N_a^{\\rm E}/L_a^*\\): nonfatal event rate\n\\(\\hat r_a^{\\rm D}= N_a^{\\rm D}/L_a^{\\rm OS}\\): death rate\n\\(\\hat r_a^*= N^*/L_a^*\\): composite event rate\n\\(L_a^{\\rm OS}\\): total person-time at risk for OS\n\\(L_a^*\\): total person-time at risk for EFS"
   },
   {
     "objectID": "presentation.html#approxmation---formula",
